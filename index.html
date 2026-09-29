@@ -105,49 +105,29 @@ a { color: inherit; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(57, 211, 83, 0); } 100% { box-shadow: 0 0 0 0 rgba(57, 211, 83, 0); } }
 
 /* ---------- lanyard + badge ---------- */
-.rig {
-  position: absolute; top: -40px; left: 50%;
-  width: 0; height: 0;
-  z-index: 5;
-}
-.swing {
-  position: absolute; left: 0; top: 0;
-  transform-origin: 0 0;
-  will-change: transform;
-}
-.strap {
-  position: absolute; left: -17px; top: 0;
-  width: 34px; height: var(--strap, 300px);
-  background:
-    repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 2px, transparent 2px 6px),
-    linear-gradient(90deg, #5b4bd1, #7d6cf2 45%, #5b4bd1);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 6px 20px rgba(0,0,0,.35);
-}
-.strap span {
-  position: absolute; left: 50%; top: 60px;
-  writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg);
-  font: 700 11px/1 var(--mono); letter-spacing: .5em; color: rgba(255,255,255,.72);
-  white-space: nowrap;
-}
-.clip {
-  position: absolute; left: -22px; top: calc(var(--strap, 300px) - 6px);
-  width: 44px; height: 46px;
-}
-.badge {
-  position: absolute; left: calc(var(--badge-w) / -2); top: calc(var(--strap, 300px) + 30px);
+.rig { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.strap-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.strap-band { fill: none; stroke: #6a5ae0; stroke-width: 32; stroke-linecap: butt; stroke-linejoin: round; }
+.strap-edge { fill: none; stroke: rgba(20, 14, 60, .45); stroke-width: 34; stroke-linejoin: round; }
+.strap-sheen { fill: none; stroke: rgba(255, 255, 255, .13); stroke-width: 10; stroke-linejoin: round; }
+.strap-text { font: 700 11px var(--mono); letter-spacing: .5em; fill: rgba(255, 255, 255, .72); dominant-baseline: central; }
+.card {
   --badge-w: clamp(220px, 20vw, 264px);
-  width: var(--badge-w);
+  position: absolute; left: 0; top: 0; width: var(--badge-w);
+  transform-origin: 50% 0; will-change: transform;
+  pointer-events: auto; touch-action: none; cursor: grab;
+}
+.rig.grabbing .card { cursor: grabbing; }
+.clip { position: absolute; left: calc(50% - 22px); top: -6px; width: 44px; height: 46px; }
+.badge {
+  position: relative; margin-top: 30px; width: 100%;
   background: var(--badge);
   color: var(--badge-ink);
   border-radius: 18px;
   padding: 26px 18px 18px;
   box-shadow: 0 30px 60px -12px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.4) inset;
-  cursor: grab;
-  touch-action: none;
   user-select: none; -webkit-user-select: none;
 }
-.strap { cursor: grab; touch-action: none; }
-.rig.grabbing .badge, .rig.grabbing .strap { cursor: grabbing; }
 .hero { -webkit-user-select: none; user-select: none; }
 .badge::before { /* slot for the clip */
   content: ""; position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
@@ -172,9 +152,12 @@ a { color: inherit; }
 .badge .photo .tag {
   position: absolute; left: 10px; bottom: 10px;
   font: 600 10px/1 var(--mono); letter-spacing: .1em;
-  padding: 6px 8px; border-radius: 6px; background: rgba(15, 13, 25, .72); color: #fff;
-  backdrop-filter: blur(6px);
+  padding: 6px 9px; border-radius: 6px; background: #16a34a; color: #fff;
+  box-shadow: 0 4px 14px -4px rgba(22, 163, 74, .8), 0 0 0 1px rgba(255, 255, 255, .25) inset;
+  display: inline-flex; align-items: center; gap: 6px;
 }
+.badge .photo .tag i { width: 7px; height: 7px; border-radius: 50%; background: #dcfce7; animation: blink 1.6s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .35; } }
 .badge h1 {
   margin: 14px 0 0; font: 400 30px/1 var(--display); letter-spacing: .02em; text-transform: uppercase;
 }
@@ -339,7 +322,8 @@ footer {
   .word { justify-self: start !important; text-align: left !important; align-self: auto !important; font-size: clamp(44px, 14vw, 72px); }
   .word:nth-child(even) { justify-self: end !important; text-align: right !important; }
   .hint { display: none; }
-  .badge { --badge-w: 208px; padding: 22px 14px 14px; }
+  .card { --badge-w: 208px; }
+  .badge { padding: 22px 14px 14px; }
   .badge h1 { font-size: 24px; }
   .badge .role { font-size: 12px; }
   .badge .barcode { width: 80px; }
@@ -352,7 +336,7 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .word, .hint, .reveal { animation: none; opacity: 1; transform: none; transition: none; }
-  .hero-foot .dot { animation: none; }
+  .hero-foot .dot, .badge .photo .tag i { animation: none; }
 }
 </style>
 </head>
@@ -377,8 +361,13 @@ footer {
   </div>
 
   <div class="rig" id="rig">
-    <div class="swing" id="swing">
-      <div class="strap"><span>ABHISHEK · GAJERA · ABHISHEK · GAJERA</span></div>
+    <svg class="strap-svg" aria-hidden="true">
+      <path class="strap-edge" id="strap-edge"/>
+      <path class="strap-band" id="strap-path"/>
+      <path class="strap-sheen" id="strap-sheen"/>
+      <text class="strap-text"><textPath href="#strap-path" startOffset="8%">ABHISHEK · GAJERA · ABHISHEK · GAJERA</textPath></text>
+    </svg>
+    <div class="card" id="swing">
       <svg class="clip" viewBox="0 0 44 46" aria-hidden="true">
         <defs><linearGradient id="metal" x1="0" x2="1"><stop offset="0" stop-color="#8f8aa3"/><stop offset=".5" stop-color="#f1eff7"/><stop offset="1" stop-color="#7d7892"/></linearGradient></defs>
         <rect x="6" y="0" width="32" height="14" rx="3" fill="url(#metal)"/>
@@ -390,7 +379,7 @@ footer {
         <div class="top"><span>DEV PASS</span><b>ACCESS: ALL</b></div>
         <div class="photo">
           <img src="assets/headshot-500.jpg" srcset="assets/headshot-500.jpg 500w, assets/headshot.jpg 1000w" sizes="290px" alt="Portrait of Abhishek Gajera" width="500" height="625">
-          <span class="tag">● AVAILABLE</span>
+          <span class="tag"><i aria-hidden="true"></i>AVAILABLE</span>
         </div>
         <h1>Abhishek Gajera</h1>
         <p class="role">Your AI and full-stack tech partner</p>
@@ -458,8 +447,7 @@ footer {
       <h2 class="reveal">Where I've <em>shipped</em></h2>
 
       <div class="jobs">
-        <div class="job reveal"><div class="when">Feb 2020 – Present</div><div><h3>Senior Full Stack Engineer <span>· Appson Technologies</span></h3><p>Own AI-powered products end to end: data model and API design, Python/FastAPI and Node.js services, React/TypeScript UIs, Flutter apps, CI/CD and production support. Lead architecture, code review, estimation and client communication.</p></div></div>
-        <div class="job reveal"><div class="when">Dec 2016 – Jan 2020</div><div><h3>Full Stack Developer <span>· Greek Web Solution</span></h3><p>Designed application architecture and shipped full-stack web and mobile features with React, React Native, Python, .NET Core and AWS-hosted data services.</p></div></div>
+        <div class="job reveal"><div class="when">Feb 2020 – Present</div><div><h3>Freelancer <span>· Full-stack and AI engineer</span></h3><p>Own AI-powered products end to end for clients: data model and API design, Python/FastAPI and Node.js services, React/TypeScript UIs, Flutter apps, CI/CD and production support. Lead architecture, code review, estimation and client communication.</p></div></div>
       </div>
 
       <p class="sub-label reveal">Featured products</p>
@@ -486,7 +474,7 @@ footer {
       <div class="project-grid">
         <article class="mini reveal"><p class="when">Jan – Jul 2025</p><h3>Lightning Chat Bot</h3><p class="kind">Conversational contact centre</p><p>Voice and chat bots on Amazon Lex and Amazon Connect with Python Lambda fulfilment, PostgreSQL conversation state and PII-safe logging.</p><div class="tags"><span>Lex V2</span><span>Amazon Connect</span><span>Python</span><span>PostgreSQL</span></div></article>
         <article class="mini reveal"><p class="when">Feb – Sep 2026</p><h3>DataLeon</h3><p class="kind">Human-in-the-loop AI data platform</p><p>React/TypeScript review editor where people correct model output: image classification and a keyboard-accessible bounding-box tool for OCR pipelines.</p><div class="tags"><span>React</span><span>TypeScript</span><span>Accessibility</span></div></article>
-        <article class="mini reveal"><p class="when">Aug 2025 – Jan 2026</p><h3>Swerbench</h3><p class="kind">Coding-agent evaluation data</p><p>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests, used to train and evaluate autonomous coding agents.</p><div class="tags"><span>Python</span><span>Git</span><span>LLM evals</span></div></article>
+        <article class="mini reveal"><p class="when">Aug 2025 – Jan 2026</p><h3>Swe-bench</h3><p class="kind">Coding-agent evaluation data</p><p>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests, used to train and evaluate autonomous coding agents.</p><div class="tags"><span>Python</span><span>Git</span><span>LLM evals</span></div></article>
         <article class="mini reveal"><p class="when">Oct 2023 – Present</p><h3>P2P lending platform</h3><p class="kind">Marketplace finance</p><p>Full-stack features for high-traffic lending workflows, with Python and Lambda event processing and partner REST APIs.</p><div class="tags"><span>React</span><span>Python</span><span>AWS Lambda</span></div></article>
         <article class="mini reveal"><p class="when">Aug 2022 – Dec 2023</p><h3>Syntbots</h3><p class="kind">Enterprise automation platform</p><p>Angular interfaces, REST and SOAP services, XML integrations and SQL Server modules, with Python utilities on Lambda.</p><div class="tags"><span>Angular</span><span>SOAP · XML</span><span>SQL Server</span></div></article>
         <article class="mini reveal"><p class="when">Jan – Sep 2023</p><h3>Publication support</h3><p class="kind">Submissions and appeals</p><p>Submission, appeals and remote-adjudication workflows with React, REST APIs, S3 document storage and Python automation.</p><div class="tags"><span>React</span><span>Python</span><span>S3</span></div></article>
@@ -594,105 +582,192 @@ footer {
   }, { threshold: 0.12 });
   document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-  // Lanyard: a damped pendulum hanging from above the viewport.
+  // Lanyard: a Verlet rope hanging from above the viewport with the card on
+  // its end. Dragging moves the card wherever the strap can reach; the rope
+  // bends to follow and the card turns to hang along it. On release the rope
+  // keeps the card's momentum and swings it back to rest.
+  const hero = document.querySelector(".hero");
   const rig = document.getElementById("rig");
-  const swing = document.getElementById("swing");
+  const card = document.getElementById("swing");
   const badge = document.getElementById("badge");
   const shine = badge.querySelector(".shine");
+  const strapPaths = ["strap-edge", "strap-path", "strap-sheen"].map((id) => document.getElementById(id));
 
-  const layout = () => {
-    const vh = rig.parentElement.clientHeight;
+  const N = 14; // rope segments
+  const STEP = 1 / 120; // fixed physics step
+  const GRAVITY = 2400; // px/s²
+  const ITER = 18; // constraint passes per step
+  // The card is two particles joined rigidly: its clip C (the rope's last
+  // point, pts[N]) and its centre B. The held spot is a point along C→B, so
+  // the card turns naturally between the strap pulling C and the hand.
+  let pts = [], prev = [], seg = 0, restSeg = 0, anchor = { x: 0, y: -40 }, reach = 0;
+  let B = { x: 0, y: 0 }, Bprev = { x: 0, y: 0 }, D = 0;
+  let tilt = 0, acc = 0, last = performance.now(), settle = 0;
+  let dragging = false, activePointer = null, target = null, holdT = 0.5, holdS = 0;
+  const W_CLIP = 0.4, W_CARD = 0.4; // card particles are heavier than rope points
+
+  const layout = (swingAngle = 0) => {
+    const w = hero.clientWidth, h = hero.clientHeight;
     const badgeH = badge.offsetHeight;
-    // Hang the badge a little above centre.
-    const strap = Math.max(140, vh * 0.47 - badgeH / 2);
-    rig.style.setProperty("--strap", strap + "px");
-    return strap + 30 + badgeH * 0.5; // pivot to badge centre
+    anchor = { x: w / 2, y: -40 };
+    // Rest with the card's centre a little above the middle of the hero.
+    reach = Math.max(180, h * 0.47 - badgeH / 2 + 40);
+    seg = restSeg = reach / N;
+    D = 30 + badgeH / 2;
+    pts = []; prev = [];
+    const sx = -Math.sin(swingAngle), sy = Math.cos(swingAngle);
+    for (let i = 0; i <= N; i++) {
+      const q = { x: anchor.x + sx * seg * i, y: anchor.y + sy * seg * i };
+      pts.push(q); prev.push({ ...q });
+    }
+    const C = pts[N];
+    B = { x: C.x + sx * D, y: C.y + sy * D }; Bprev = { ...B };
   };
-  let L = layout();
-  addEventListener("resize", () => { L = layout(); });
 
-  // While dragging, the badge chases the pointer through a stiff spring instead
-  // of jumping to it, so uneven pointer events can't make it stutter, and the
-  // velocity it carries into the release comes from the simulation itself.
-  let angle = reduce ? 0 : 0.34, vel = 0, tilt = 0;
-  let dragging = false, target = 0, grabOffset = 0, last = performance.now(), acc = 0;
-  const STEP = 1 / 240; // fixed physics step, independent of frame rate
-  const LIMIT = 1.25; // soft stop, in radians
+  // rope = true: a strap only pulls (slack when compressed); false: rigid.
+  const link = (a, wa, b, wb, len, rope) => {
+    if (wa + wb === 0) return;
+    const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1e-6;
+    if (rope && d <= len) return;
+    const diff = (d - len) / d, ka = wa / (wa + wb), kb = wb / (wa + wb);
+    a.x += dx * diff * ka; a.y += dy * diff * ka;
+    b.x -= dx * diff * kb; b.y -= dy * diff * kb;
+  };
 
-  const render = () => {
-    swing.style.transform = `rotate(${angle.toFixed(4)}rad)`;
-    badge.style.transform = `perspective(800px) rotateY(${tilt.toFixed(2)}deg)`;
-    shine.style.setProperty("--shine", `${(120 - angle * 180).toFixed(1)}%`);
+  const hold = () => {
+    // Move the held point P = C + t(B − C) toward the pointer, sharing the
+    // correction between C and B by how close P is to each.
+    // The grabbed spot sits holdS to the side of the card's axis; aim the axis
+    // point so that spot, not the axis, stays under the pointer.
+    const C0 = pts[N], ux = (B.x - C0.x) / D, uy = (B.y - C0.y) / D;
+    const tx = target.x + uy * holdS, ty = target.y - ux * holdS;
+    const C = pts[N], t = holdT;
+    const px = C.x + (B.x - C.x) * t, py = C.y + (B.y - C.y) * t;
+    const ex = (tx - px) * 0.5, ey = (ty - py) * 0.5;
+    const norm = (1 - t) * (1 - t) + t * t;
+    C.x += ex * (1 - t) / norm; C.y += ey * (1 - t) / norm;
+    B.x += ex * t / norm; B.y += ey * t / norm;
+  };
+
+  const integrate = (p, q, damp, dt) => {
+    const vx = (p.x - q.x) * damp, vy = (p.y - q.y) * damp;
+    q.x = p.x; q.y = p.y;
+    p.x += vx; p.y += vy + GRAVITY * dt * dt;
+  };
+
+  // The strap is elastic: while held it stretches toward the pointer, with
+  // resistance growing the further it goes; once let go it eases back to its
+  // resting length, which pulls the card home.
+  const stretch = () => {
+    let want = restSeg;
+    if (dragging && target) {
+      const need = Math.hypot(target.x - anchor.x, target.y - anchor.y) - D * holdT;
+      const extra = Math.max(0, need - reach);
+      const give = extra / (1 + extra / (reach * 3)); // soft limit, about 3x reach
+      want = (reach + give) / N;
+    }
+    seg += (want - seg) * (dragging ? 0.35 : 0.03);
   };
 
   const physics = (dt) => {
-    let force;
-    if (dragging) {
-      const k = 210, damping = 2 * Math.sqrt(k) * 0.92; // just under critical
-      force = k * (target - angle) - damping * vel;
-    } else {
-      force = -(2600 / L) * Math.sin(angle) - 1.35 * vel;
+    stretch();
+    // While the stretched strap retracts, damp hard so the card glides home
+    // instead of being flung past it; then let it swing freely.
+    settle = Math.max(0, settle - dt);
+    const retracting = !dragging && seg > restSeg * 1.04;
+    const damp = retracting ? 0.93 : settle > 0 ? 0.978 : 0.987;
+    for (let i = 1; i <= N; i++) integrate(pts[i], prev[i], damp, dt);
+    integrate(B, Bprev, dragging ? 0.9 : damp, dt);
+    if (dragging && target) { prev[N].x += (pts[N].x - prev[N].x) * 0.1; }
+    for (let k = 0; k < ITER; k++) {
+      pts[0].x = anchor.x; pts[0].y = anchor.y;
+      if (dragging && target) hold();
+      for (let i = 0; i < N; i++) link(pts[i], i === 0 ? 0 : 1, pts[i + 1], i + 1 === N ? W_CLIP : 1, seg, true);
+      link(pts[N], W_CLIP, B, W_CARD, D, false);
     }
-    // Soft limit: resist harder the further past it the badge goes.
-    const over = Math.abs(angle) - LIMIT;
-    if (over > 0) force -= Math.sign(angle) * over * 900 + vel * 8;
-    vel += force * dt;
-    angle += vel * dt;
+  };
+
+  const strapD = () => {
+    // Smooth curve through the rope points (Catmull-Rom as cubic Béziers).
+    let d = `M${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+    for (let i = 0; i < N; i++) {
+      const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(N, i + 2)];
+      d += ` C${(p1.x + (p2.x - p0.x) / 6).toFixed(1)} ${(p1.y + (p2.y - p0.y) / 6).toFixed(1)} ${(p2.x - (p3.x - p1.x) / 6).toFixed(1)} ${(p2.y - (p3.y - p1.y) / 6).toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    }
+    return d;
+  };
+
+  const render = () => {
+    const e = pts[N];
+    const d = strapD();
+    strapPaths.forEach((path) => path.setAttribute("d", d));
+    const theta = -Math.atan2(B.x - e.x, B.y - e.y);
+    const vx = B.x - Bprev.x;
+    tilt += (Math.max(-18, Math.min(18, vx * 1.6)) - tilt) * 0.15;
+    card.style.transform = `translate(${(e.x - card.offsetWidth / 2).toFixed(2)}px, ${e.y.toFixed(2)}px) rotate(${theta.toFixed(4)}rad)`;
+    badge.style.transform = `perspective(800px) rotateY(${tilt.toFixed(2)}deg)`;
+    shine.style.setProperty("--shine", `${(120 - theta * 180).toFixed(1)}%`);
   };
 
   const frame = (now) => {
     acc += Math.min(0.05, (now - last) / 1000);
     last = now;
     while (acc >= STEP) { physics(STEP); acc -= STEP; }
-    // Ease the 3D tilt toward the swing speed rather than following it raw.
-    const want = Math.max(-16, Math.min(16, vel * 14));
-    tilt += (want - tilt) * 0.12;
     render();
     requestAnimationFrame(frame);
   };
-  if (!reduce) requestAnimationFrame(frame); else render();
 
-  const pointerAngle = (e) => {
-    const r = rig.getBoundingClientRect();
-    return Math.atan2(e.clientX - r.left, e.clientY - r.top) * -1;
+  layout(reduce ? 0 : 0.34);
+  if (reduce) render(); else requestAnimationFrame(frame);
+  addEventListener("resize", () => { layout(0); if (reduce) render(); });
+
+  const heroPoint = (e) => {
+    const r = hero.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
   };
-  // The strap and the badge are both handles. Every way a drag can end is
-  // handled, so the badge can never be left "held" after the button is up:
-  // a release anywhere, a cancelled gesture, lost capture, the window losing
-  // focus, or a move that arrives with no button pressed.
-  let activePointer = null;
+
+  // Every way a drag can end is handled, so the card can never be left
+  // "held": a release anywhere, a cancelled gesture, lost capture, the window
+  // losing focus, or a move that arrives with no button pressed.
   const start = (e) => {
-    if (e.button !== 0 && e.pointerType === "mouse") return;
-    e.preventDefault(); // no text selection or native drag from the badge
+    if (reduce || (e.button !== 0 && e.pointerType === "mouse")) return;
+    e.preventDefault(); // no text selection or native drag from the card
     dragging = true;
     activePointer = e.pointerId;
-    try { swing.setPointerCapture(e.pointerId); } catch (_) {}
-    // Remember where it was grabbed so it doesn't jump to the pointer.
-    grabOffset = angle - pointerAngle(e);
-    target = angle;
+    try { card.setPointerCapture(e.pointerId); } catch (_) {}
+    const p = heroPoint(e);
+    // Hold the card by the spot that was grabbed, measured along its clip→centre axis.
+    const C = pts[N], ax = B.x - C.x, ay = B.y - C.y;
+    holdT = Math.max(0, Math.min(2, ((p.x - C.x) * ax + (p.y - C.y) * ay) / (D * D)));
+    holdS = ((p.x - C.x) * -ay + (p.y - C.y) * ax) / D; // signed distance across the axis
+    target = p;
     rig.classList.add("grabbing");
     document.querySelector(".hint").style.visibility = "hidden";
   };
   const move = (e) => {
     if (!dragging || e.pointerId !== activePointer) return;
     if (e.pointerType === "mouse" && e.buttons === 0) return release();
-    target = pointerAngle(e) + grabOffset;
-    if (reduce) { angle = Math.max(-LIMIT, Math.min(LIMIT, target)); render(); }
+    target = heroPoint(e);
   };
   function release() {
     if (!dragging) return;
     dragging = false;
     activePointer = null;
+    target = null;
     rig.classList.remove("grabbing");
-    vel = Math.max(-7, Math.min(7, vel));
-    if (reduce) { angle = 0; vel = 0; render(); }
+    settle = 0.6;
+    // Cap the throw so a flick can't wrap the strap around the anchor.
+    [[pts[N], prev[N]], [B, Bprev]].forEach(([e, q]) => {
+      const vx = e.x - q.x, vy = e.y - q.y, v = Math.hypot(vx, vy), max = 14;
+      if (v > max) { q.x = e.x - (vx / v) * max; q.y = e.y - (vy / v) * max; }
+    });
   }
-  swing.addEventListener("pointerdown", start);
-  swing.addEventListener("dragstart", (e) => e.preventDefault());
+  card.addEventListener("pointerdown", start);
+  card.addEventListener("dragstart", (e) => e.preventDefault());
   addEventListener("pointermove", move);
   addEventListener("pointerup", release);
   addEventListener("pointercancel", release);
-  swing.addEventListener("lostpointercapture", release);
+  card.addEventListener("lostpointercapture", release);
   addEventListener("blur", release);
   document.addEventListener("visibilitychange", release);
   document.documentElement.addEventListener("mouseleave", release);

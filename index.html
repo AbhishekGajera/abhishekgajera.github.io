@@ -212,11 +212,15 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(-
 
 /* stack */
 .stack { background: var(--bg-2); border-block: 1px solid var(--line); }
-.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.stack-grid { columns: 3 300px; column-gap: 16px; }
+.stack-grid .stack-card { break-inside: avoid; margin-bottom: 16px; }
+.stack-count { margin: -8px 0 28px; font: 13px/1.5 var(--mono); color: var(--muted); }
+.stack-card.hot { border-color: rgba(198, 184, 255, .45); background: linear-gradient(160deg, rgba(139, 123, 240, .16), var(--panel) 60%); }
+.stack-card.hot h3 { color: var(--accent); }
 .stack-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
 .stack-card h3 { margin: 0 0 14px; font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font: 500 14px/1 var(--sans); padding: 9px 12px; border-radius: 999px; background: rgba(198, 184, 255, .08); border: 1px solid rgba(198, 184, 255, .18); }
+.chip { font: 500 13.5px/1 var(--sans); padding: 8px 11px; border-radius: 999px; background: rgba(198, 184, 255, .08); border: 1px solid rgba(198, 184, 255, .18); }
 
 /* work */
 .work-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
@@ -352,7 +356,7 @@ footer {
         </p>
       </div>
       <div class="facts reveal">
-        <div class="fact"><b id="years">5+</b><span>years shipping on GitHub</span></div>
+        <div class="fact"><b id="years">10</b><span>years building software</span></div>
         <div class="fact"><b id="contribs">4,364</b><span>contributions in the last year</span></div>
         <div class="fact"><b>Web · AI · Mobile</b><span>products taken from idea to production</span></div>
       </div>
@@ -363,13 +367,18 @@ footer {
     <div class="wrap">
       <p class="label reveal">02 — Stack</p>
       <h2 class="reveal">Tools I <em>reach for</em></h2>
+      <p class="stack-count reveal">81 tools across 10 areas, all used in production work</p>
       <div class="stack-grid">
-        <div class="stack-card reveal"><h3>Languages</h3><div class="chips"><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Dart</span><span class="chip">SQL</span></div></div>
-        <div class="stack-card reveal"><h3>Frontend</h3><div class="chips"><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">Electron</span><span class="chip">Tailwind</span></div></div>
-        <div class="stack-card reveal"><h3>Backend</h3><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">REST APIs</span><span class="chip">Socket.io</span></div></div>
-        <div class="stack-card reveal"><h3>Mobile</h3><div class="chips"><span class="chip">Flutter</span><span class="chip">Firebase</span><span class="chip">Codemagic</span></div></div>
-        <div class="stack-card reveal"><h3>Data</h3><div class="chips"><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span><span class="chip">MySQL</span></div></div>
-        <div class="stack-card reveal"><h3>Cloud &amp; delivery</h3><div class="chips"><span class="chip">AWS</span><span class="chip">GitHub Actions</span><span class="chip">CI/CD</span></div></div>
+        <div class="stack-card hot reveal"><h3>Generative AI</h3><div class="chips"><span class="chip">OpenAI</span><span class="chip">Anthropic Claude</span><span class="chip">Azure OpenAI</span><span class="chip">Llama · Mistral (Ollama)</span><span class="chip">LangChain</span><span class="chip">RAG pipelines</span><span class="chip">Hybrid retrieval and reranking</span><span class="chip">Tool calling and agents</span><span class="chip">Structured outputs</span><span class="chip">Prompt versioning and evals</span><span class="chip">AI guardrails and PII masking</span><span class="chip">Streamlit</span></div></div>
+        <div class="stack-card hot reveal"><h3>Conversational AI</h3><div class="chips"><span class="chip">Amazon Lex V2</span><span class="chip">Amazon Connect voice and chat</span><span class="chip">Multi-turn memory</span><span class="chip">Streaming chat UIs</span><span class="chip">LLM agent evaluation</span></div></div>
+        <div class="stack-card reveal"><h3>Languages</h3><div class="chips"><span class="chip">TypeScript</span><span class="chip">JavaScript (ES2020+)</span><span class="chip">Python</span><span class="chip">Dart</span><span class="chip">SQL</span><span class="chip">HTML5</span><span class="chip">CSS3</span></div></div>
+        <div class="stack-card reveal"><h3>Frontend</h3><div class="chips"><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">Redux Toolkit</span><span class="chip">Zustand</span><span class="chip">React Query</span><span class="chip">Angular</span><span class="chip">Material UI</span><span class="chip">SSE and WebSocket UIs</span><span class="chip">Accessibility (WCAG 2.1)</span><span class="chip">Core Web Vitals</span><span class="chip">Design systems</span></div></div>
+        <div class="stack-card reveal"><h3>Backend and APIs</h3><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">FastAPI</span><span class="chip">Flask</span><span class="chip">ASP.NET · .NET Core</span><span class="chip">REST APIs</span><span class="chip">WebSockets · SSE</span><span class="chip">Socket.io</span><span class="chip">SOAP · XML</span><span class="chip">Background jobs</span></div></div>
+        <div class="stack-card reveal"><h3>Mobile and desktop</h3><div class="chips"><span class="chip">Flutter</span><span class="chip">React Native</span><span class="chip">Electron</span><span class="chip">Firebase</span><span class="chip">Codemagic</span></div></div>
+        <div class="stack-card reveal"><h3>Data and search</h3><div class="chips"><span class="chip">PostgreSQL</span><span class="chip">pgvector</span><span class="chip">MySQL</span><span class="chip">MongoDB</span><span class="chip">Redis</span><span class="chip">DynamoDB</span><span class="chip">SQL Server</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">Algolia</span></div></div>
+        <div class="stack-card reveal"><h3>AWS and cloud</h3><div class="chips"><span class="chip">Lambda</span><span class="chip">API Gateway</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">S3</span><span class="chip">CloudWatch</span><span class="chip">Docker</span><span class="chip">Kubernetes</span></div></div>
+        <div class="stack-card reveal"><h3>Testing</h3><div class="chips"><span class="chip">Jest</span><span class="chip">React Testing Library</span><span class="chip">Pytest</span><span class="chip">Playwright</span><span class="chip">Prompt regression tests</span></div></div>
+        <div class="stack-card reveal"><h3>DevOps and observability</h3><div class="chips"><span class="chip">Git</span><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Azure DevOps</span><span class="chip">CI/CD</span><span class="chip">Sentry</span><span class="chip">New Relic</span><span class="chip">Agile · Scrum</span></div></div>
       </div>
     </div>
   </section>
@@ -441,7 +450,7 @@ footer {
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.getElementById("yr").textContent = new Date().getFullYear();
-  document.getElementById("years").textContent = (new Date().getFullYear() - 2021) + "+";
+  document.getElementById("years").textContent = String(new Date().getFullYear() - 2016);
 
   // Live contribution total from the profile repo's daily refresh.
   fetch("https://raw.githubusercontent.com/AbhishekGajera/AbhishekGajera/main/data/contributions.json")
@@ -484,52 +493,67 @@ footer {
   let L = layout();
   addEventListener("resize", () => { L = layout(); });
 
-  let angle = reduce ? 0 : 0.34, vel = 0, dragging = false;
-  let last = performance.now(), lastPointerAngle = 0, lastPointerT = 0;
+  // While dragging, the badge chases the pointer through a stiff spring instead
+  // of jumping to it, so uneven pointer events can't make it stutter, and the
+  // velocity it carries into the release comes from the simulation itself.
+  let angle = reduce ? 0 : 0.34, vel = 0, tilt = 0;
+  let dragging = false, target = 0, grabOffset = 0, last = performance.now(), acc = 0;
+  const STEP = 1 / 240; // fixed physics step, independent of frame rate
+  const LIMIT = 1.25; // soft stop, in radians
 
   const render = () => {
-    const tilt = Math.max(-18, Math.min(18, vel * 26));
-    swing.style.transform = `rotate(${angle}rad)`;
-    badge.style.transform = `perspective(700px) rotateY(${tilt}deg)`;
-    shine.style.setProperty("--shine", `${120 - angle * 180}%`);
+    swing.style.transform = `rotate(${angle.toFixed(4)}rad)`;
+    badge.style.transform = `perspective(800px) rotateY(${tilt.toFixed(2)}deg)`;
+    shine.style.setProperty("--shine", `${(120 - angle * 180).toFixed(1)}%`);
   };
 
-  const step = (now) => {
-    const dt = Math.min(0.032, (now - last) / 1000);
-    last = now;
-    if (!dragging) {
-      const g = 2600; // px/s², tuned for a lively but heavy feel
-      vel += (-(g / L) * Math.sin(angle) - 1.6 * vel) * dt;
-      angle += vel * dt;
+  const physics = (dt) => {
+    let force;
+    if (dragging) {
+      const k = 210, damping = 2 * Math.sqrt(k) * 0.92; // just under critical
+      force = k * (target - angle) - damping * vel;
+    } else {
+      force = -(2600 / L) * Math.sin(angle) - 1.35 * vel;
     }
-    render();
-    requestAnimationFrame(step);
+    // Soft limit: resist harder the further past it the badge goes.
+    const over = Math.abs(angle) - LIMIT;
+    if (over > 0) force -= Math.sign(angle) * over * 900 + vel * 8;
+    vel += force * dt;
+    angle += vel * dt;
   };
-  if (!reduce) requestAnimationFrame(step); else render();
+
+  const frame = (now) => {
+    acc += Math.min(0.05, (now - last) / 1000);
+    last = now;
+    while (acc >= STEP) { physics(STEP); acc -= STEP; }
+    // Ease the 3D tilt toward the swing speed rather than following it raw.
+    const want = Math.max(-16, Math.min(16, vel * 14));
+    tilt += (want - tilt) * 0.12;
+    render();
+    requestAnimationFrame(frame);
+  };
+  if (!reduce) requestAnimationFrame(frame); else render();
 
   const pointerAngle = (e) => {
     const r = rig.getBoundingClientRect();
-    return Math.atan2(r.left - e.clientX, e.clientY - r.top) * -1;
+    return Math.atan2(e.clientX - r.left, e.clientY - r.top) * -1;
   };
   badge.addEventListener("pointerdown", (e) => {
     dragging = true;
     badge.setPointerCapture(e.pointerId);
-    lastPointerAngle = pointerAngle(e);
-    lastPointerT = performance.now();
+    // Remember where on the badge it was grabbed so it doesn't jump.
+    grabOffset = angle - pointerAngle(e);
+    target = angle;
     document.querySelector(".hint").style.visibility = "hidden";
   });
   badge.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-    const a = Math.max(-1.3, Math.min(1.3, pointerAngle(e)));
-    const t = performance.now();
-    vel = (a - lastPointerAngle) / Math.max(0.008, (t - lastPointerT) / 1000);
-    lastPointerAngle = a; lastPointerT = t;
-    angle = a;
-    if (reduce) render();
+    target = pointerAngle(e) + grabOffset;
+    if (reduce) { angle = Math.max(-LIMIT, Math.min(LIMIT, target)); render(); }
   });
   const release = () => {
     dragging = false;
-    vel = Math.max(-9, Math.min(9, vel));
+    vel = Math.max(-7, Math.min(7, vel));
     if (reduce) { angle = 0; vel = 0; render(); }
   };
   badge.addEventListener("pointerup", release);

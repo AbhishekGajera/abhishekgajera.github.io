@@ -146,7 +146,9 @@ a { color: inherit; }
   touch-action: none;
   user-select: none; -webkit-user-select: none;
 }
-.badge:active { cursor: grabbing; }
+.strap { cursor: grab; touch-action: none; }
+.rig.grabbing .badge, .rig.grabbing .strap { cursor: grabbing; }
+.hero { -webkit-user-select: none; user-select: none; }
 .badge::before { /* slot for the clip */
   content: ""; position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
   width: 46px; height: 8px; border-radius: 6px; background: #d9d4e8; box-shadow: inset 0 1px 2px rgba(0,0,0,.25);
@@ -223,18 +225,41 @@ h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(-
 .chip { font: 500 13.5px/1 var(--sans); padding: 8px 11px; border-radius: 999px; background: rgba(198, 184, 255, .08); border: 1px solid rgba(198, 184, 255, .18); }
 
 /* work */
-.work-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
-.project {
-  display: grid; grid-template-columns: 70px 1fr auto; gap: 24px; align-items: baseline;
-  padding: 28px 4px; border-bottom: 1px solid var(--line);
-  text-decoration: none; transition: background .25s, padding .25s;
+.sub-label { font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 64px 0 20px; }
+.jobs { display: grid; border-top: 1px solid var(--line); }
+.job { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.job .when { font: 13px/1.6 var(--mono); color: var(--accent); }
+.job h3 { margin: 0; font: 600 20px/1.3 var(--sans); }
+.job h3 span { color: var(--muted); font-weight: 500; }
+.job p { margin: 8px 0 0; color: var(--muted); max-width: 70ch; }
+.featured { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+.case {
+  position: relative; padding: 28px; border-radius: 20px; border: 1px solid rgba(198, 184, 255, .3);
+  background: linear-gradient(165deg, rgba(139, 123, 240, .18), var(--panel) 55%);
 }
-.project:hover { background: linear-gradient(90deg, rgba(139, 123, 240, .10), transparent); padding-left: 16px; }
-.project .n { font: 12px/1 var(--mono); color: var(--muted); }
-.project h3 { margin: 0; font: 400 clamp(26px, 3.2vw, 40px)/1.05 var(--display); text-transform: uppercase; letter-spacing: .01em; }
-.project p { margin: 8px 0 0; color: var(--muted); max-width: 62ch; }
-.project .tags { font: 12px/1.6 var(--mono); color: var(--accent); text-align: right; white-space: nowrap; }
-.project .tags i { font-style: normal; display: block; color: var(--muted); }
+.case-head { display: flex; justify-content: space-between; font: 12px/1 var(--mono); color: var(--muted); }
+.case .when { color: var(--accent); }
+.case h3 { margin: 18px 0 0; font: 400 clamp(38px, 4.6vw, 56px)/1 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+.case .kind { margin: 8px 0 0; font-size: 17px; color: var(--text); }
+.case .case-role { margin: 4px 0 0; font: 13px/1.5 var(--mono); color: var(--muted); }
+.case ul { margin: 20px 0 22px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.case li { position: relative; padding-left: 20px; color: var(--muted); }
+.case li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--accent); }
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; }
+.mini { padding: 22px; border-radius: 16px; background: var(--bg-2); border: 1px solid var(--line); transition: border-color .25s, transform .25s; }
+.mini:hover { border-color: rgba(198, 184, 255, .4); transform: translateY(-3px); }
+.mini .when { margin: 0; font: 12px/1 var(--mono); color: var(--accent); }
+.mini h3 { margin: 12px 0 0; font: 400 26px/1.05 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+.mini .kind { margin: 4px 0 10px; color: var(--text); font-size: 14px; }
+.mini p { margin: 0; color: var(--muted); font-size: 15px; }
+.mini .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.mini .tags span { font: 11px/1 var(--mono); padding: 6px 8px; border-radius: 6px; background: rgba(198, 184, 255, .08); color: var(--accent); }
+.oss { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.oss a { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 18px 20px; text-decoration: none; border: .5px solid var(--line); transition: background .2s; }
+.oss a:hover { background: rgba(139, 123, 240, .08); }
+.oss b { font-weight: 600; }
+.oss span { grid-column: 1; color: var(--muted); font-size: 14px; }
+.oss i { grid-row: 1 / 3; grid-column: 2; align-self: center; font-style: normal; color: var(--accent); }
 .note { margin-top: 28px; font: 13px/1.6 var(--mono); color: var(--muted); }
 
 /* activity */
@@ -261,6 +286,50 @@ footer {
   font: 12px/1.4 var(--mono); color: var(--muted);
 }
 
+/* chat contact */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.chat { position: fixed; right: clamp(16px, 3vw, 28px); bottom: clamp(16px, 3vw, 28px); z-index: 40; }
+.chat-fab {
+  position: relative; width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center; color: #140f2b; background: var(--accent);
+  box-shadow: 0 14px 30px -8px rgba(139, 123, 240, .7); transition: transform .2s;
+}
+.chat-fab:hover { transform: translateY(-2px) scale(1.04); }
+.chat-fab svg { width: 26px; height: 26px; }
+.chat-ping { position: absolute; top: 3px; right: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--green); border: 2px solid var(--bg); }
+.chat.open .chat-ping { display: none; }
+.chat-panel {
+  position: absolute; right: 0; bottom: 74px; width: min(360px, calc(100vw - 32px));
+  background: var(--panel); border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .7);
+  transform-origin: bottom right; animation: pop .22s cubic-bezier(.2, .8, .2, 1);
+}
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.96); } }
+.chat-panel header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-2); border-bottom: 1px solid var(--line); }
+.chat-panel header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.chat-panel header p { margin: 0; font-weight: 600; font-size: 15px; }
+.chat-panel header span { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.chat-panel header span i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.chat-x { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; border: 0; background: transparent; color: var(--muted); font-size: 22px; cursor: pointer; }
+.chat-x:hover { background: rgba(255,255,255,.06); color: var(--text); }
+.chat-body { padding: 16px 16px 4px; display: grid; gap: 8px; }
+.bubble { margin: 0; justify-self: start; max-width: 88%; padding: 10px 13px; border-radius: 4px 14px 14px 14px; background: var(--bg-2); font-size: 14px; line-height: 1.45; }
+.quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.quick button { font: 500 12.5px/1 var(--sans); padding: 8px 11px; border-radius: 999px; cursor: pointer; color: var(--accent); background: transparent; border: 1px solid rgba(198, 184, 255, .35); }
+.quick button:hover, .quick button[aria-pressed="true"] { background: rgba(198, 184, 255, .14); }
+.chat-form { padding: 12px 16px 16px; display: grid; gap: 8px; }
+.chat-form input, .chat-form textarea {
+  width: 100%; font: 14px/1.4 var(--sans); color: var(--text); background: var(--bg); resize: none;
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+}
+.chat-form input:focus, .chat-form textarea:focus { outline: none; border-color: var(--accent-2); }
+.chat-err { margin: 0; min-height: 0; font-size: 12.5px; color: #ff8f8f; }
+.chat-err:empty { display: none; }
+.chat-send { font: 600 14px/1 var(--sans); padding: 12px; border-radius: 10px; border: 0; cursor: pointer; background: var(--accent); color: #140f2b; }
+.chat-alt { margin: 2px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
+.chat-alt a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .chat-panel { animation: none; } }
+
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s, transform .8s cubic-bezier(.2, .8, .2, 1); }
 .reveal.in { opacity: 1; transform: none; }
 
@@ -275,9 +344,9 @@ footer {
   .badge .role { font-size: 12px; }
   .badge .barcode { width: 80px; }
   .about-grid { grid-template-columns: 1fr; }
-  .project { grid-template-columns: 1fr; gap: 10px; }
-  .project .tags { text-align: left; white-space: normal; }
-  .project .tags i { display: inline; margin-left: 10px; }
+  .job { grid-template-columns: 1fr; gap: 6px; }
+  .featured { grid-template-columns: 1fr; }
+  .case { padding: 22px; }
   .hero-foot { flex-direction: column; align-items: start; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -316,7 +385,7 @@ footer {
         <path d="M14 13v14a8 8 0 0 0 16 0V13" fill="none" stroke="url(#metal)" stroke-width="5"/>
         <rect x="18" y="34" width="8" height="12" rx="2" fill="url(#metal)"/>
       </svg>
-      <article class="badge" id="badge" aria-label="ID badge: Abhishek Gajera, full-stack developer">
+      <article class="badge" id="badge" aria-label="ID badge: Abhishek Gajera, AI and full-stack tech partner">
         <div class="shine"></div>
         <div class="top"><span>DEV PASS</span><b>ACCESS: ALL</b></div>
         <div class="photo">
@@ -324,11 +393,11 @@ footer {
           <span class="tag">● AVAILABLE</span>
         </div>
         <h1>Abhishek Gajera</h1>
-        <p class="role">Full-stack JavaScript Developer</p>
+        <p class="role">Your AI and full-stack tech partner</p>
         <div class="meta">
           <dl>
             <dt>ID</dt><dd>AG-2021</dd>
-            <dt>STACK</dt><dd>TS · NODE</dd>
+            <dt>BUILDS</dt><dd>AI · WEB · APPS</dd>
           </dl>
           <svg class="barcode" id="barcode" viewBox="0 0 104 34" aria-hidden="true"></svg>
         </div>
@@ -367,13 +436,13 @@ footer {
     <div class="wrap">
       <p class="label reveal">02 — Stack</p>
       <h2 class="reveal">Tools I <em>reach for</em></h2>
-      <p class="stack-count reveal">81 tools across 10 areas, all used in production work</p>
+      <p class="stack-count reveal">82 tools across 10 areas, all used in production work</p>
       <div class="stack-grid">
         <div class="stack-card hot reveal"><h3>Generative AI</h3><div class="chips"><span class="chip">OpenAI</span><span class="chip">Anthropic Claude</span><span class="chip">Azure OpenAI</span><span class="chip">Llama · Mistral (Ollama)</span><span class="chip">LangChain</span><span class="chip">RAG pipelines</span><span class="chip">Hybrid retrieval and reranking</span><span class="chip">Tool calling and agents</span><span class="chip">Structured outputs</span><span class="chip">Prompt versioning and evals</span><span class="chip">AI guardrails and PII masking</span><span class="chip">Streamlit</span></div></div>
         <div class="stack-card hot reveal"><h3>Conversational AI</h3><div class="chips"><span class="chip">Amazon Lex V2</span><span class="chip">Amazon Connect voice and chat</span><span class="chip">Multi-turn memory</span><span class="chip">Streaming chat UIs</span><span class="chip">LLM agent evaluation</span></div></div>
         <div class="stack-card reveal"><h3>Languages</h3><div class="chips"><span class="chip">TypeScript</span><span class="chip">JavaScript (ES2020+)</span><span class="chip">Python</span><span class="chip">Dart</span><span class="chip">SQL</span><span class="chip">HTML5</span><span class="chip">CSS3</span></div></div>
         <div class="stack-card reveal"><h3>Frontend</h3><div class="chips"><span class="chip">React</span><span class="chip">Next.js</span><span class="chip">Redux Toolkit</span><span class="chip">Zustand</span><span class="chip">React Query</span><span class="chip">Angular</span><span class="chip">Material UI</span><span class="chip">SSE and WebSocket UIs</span><span class="chip">Accessibility (WCAG 2.1)</span><span class="chip">Core Web Vitals</span><span class="chip">Design systems</span></div></div>
-        <div class="stack-card reveal"><h3>Backend and APIs</h3><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">FastAPI</span><span class="chip">Flask</span><span class="chip">ASP.NET · .NET Core</span><span class="chip">REST APIs</span><span class="chip">WebSockets · SSE</span><span class="chip">Socket.io</span><span class="chip">SOAP · XML</span><span class="chip">Background jobs</span></div></div>
+        <div class="stack-card reveal"><h3>Backend and APIs</h3><div class="chips"><span class="chip">Python</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">FastAPI</span><span class="chip">Flask</span><span class="chip">ASP.NET · .NET Core</span><span class="chip">REST APIs</span><span class="chip">WebSockets · SSE</span><span class="chip">Socket.io</span><span class="chip">SOAP · XML</span><span class="chip">Background jobs</span></div></div>
         <div class="stack-card reveal"><h3>Mobile and desktop</h3><div class="chips"><span class="chip">Flutter</span><span class="chip">React Native</span><span class="chip">Electron</span><span class="chip">Firebase</span><span class="chip">Codemagic</span></div></div>
         <div class="stack-card reveal"><h3>Data and search</h3><div class="chips"><span class="chip">PostgreSQL</span><span class="chip">pgvector</span><span class="chip">MySQL</span><span class="chip">MongoDB</span><span class="chip">Redis</span><span class="chip">DynamoDB</span><span class="chip">SQL Server</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">Algolia</span></div></div>
         <div class="stack-card reveal"><h3>AWS and cloud</h3><div class="chips"><span class="chip">Lambda</span><span class="chip">API Gateway</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">S3</span><span class="chip">CloudWatch</span><span class="chip">Docker</span><span class="chip">Kubernetes</span></div></div>
@@ -386,35 +455,51 @@ footer {
   <section id="work">
     <div class="wrap">
       <p class="label reveal">03 — Work</p>
-      <h2 class="reveal">Selected <em>projects</em></h2>
-      <div class="work-list">
-        <a class="project reveal" href="https://github.com/AbhishekGajera/mern-chat-app" target="_blank" rel="noopener">
-          <span class="n">/01</span>
-          <div><h3>Talk-A-Tive</h3><p>A full-stack chat app with real-time messaging over Socket.io and user data stored encrypted in MongoDB.</p></div>
-          <span class="tags">MERN<i>Socket.io</i></span>
-        </a>
-        <a class="project reveal" href="https://github.com/AbhishekGajera/diamond-web" target="_blank" rel="noopener">
-          <span class="n">/02</span>
-          <div><h3>Diamond stock manager</h3><p>A stock management system with a React front end and its own Node API, built to track inventory end to end.</p></div>
-          <span class="tags">React<i>Node · API</i></span>
-        </a>
-        <a class="project reveal" href="https://github.com/AbhishekGajera/sain-book-flutter" target="_blank" rel="noopener">
-          <span class="n">/03</span>
-          <div><h3>Sain Book</h3><p>A Flutter app for managing products in a warehouse, running on Android and iOS from one codebase.</p></div>
-          <span class="tags">Flutter<i>Dart</i></span>
-        </a>
-        <a class="project reveal" href="https://github.com/AbhishekGajera/react-electron-file-sync" target="_blank" rel="noopener">
-          <span class="n">/04</span>
-          <div><h3>Electron file sync</h3><p>A desktop app built with React and Electron for syncing files from the local machine.</p></div>
-          <span class="tags">Electron<i>React</i></span>
-        </a>
-        <a class="project reveal" href="https://github.com/AbhishekGajera/ecommerce-platform" target="_blank" rel="noopener">
-          <span class="n">/05</span>
-          <div><h3>E-commerce platform</h3><p>A React storefront with product catalogue, cart and checkout flows.</p></div>
-          <span class="tags">React<i>JavaScript</i></span>
-        </a>
+      <h2 class="reveal">Where I've <em>shipped</em></h2>
+
+      <div class="jobs">
+        <div class="job reveal"><div class="when">Feb 2020 – Present</div><div><h3>Senior Full Stack Engineer <span>· Appson Technologies</span></h3><p>Own AI-powered products end to end: data model and API design, Python/FastAPI and Node.js services, React/TypeScript UIs, Flutter apps, CI/CD and production support. Lead architecture, code review, estimation and client communication.</p></div></div>
+        <div class="job reveal"><div class="when">Dec 2016 – Jan 2020</div><div><h3>Full Stack Developer <span>· Greek Web Solution</span></h3><p>Designed application architecture and shipped full-stack web and mobile features with React, React Native, Python, .NET Core and AWS-hosted data services.</p></div></div>
       </div>
-      <p class="note reveal">Most of my recent work is client products (AI workspaces, SaaS platforms and store-published mobile apps) in private repositories.</p>
+
+      <p class="sub-label reveal">Featured products</p>
+      <div class="featured">
+        <article class="case reveal">
+          <div class="case-head"><span class="n">/01</span><span class="when">Jul 2022 – Present</span></div>
+          <h3>Baysten</h3>
+          <p class="kind">AI-assisted professional network</p>
+          <p class="case-role">Full Stack Developer · AI Platform Lead</p>
+          <ul><li>Built a FastAPI matching engine with hybrid retrieval over Weaviate, combining semantic embeddings with structured scoring for recruiter searches.</li><li>Added LLM query analysis behind a provider-agnostic layer, with retries, circuit breakers and fallbacks.</li><li>Created resume parsing and LangChain/OpenAI enrichment services with schema-validated outputs, Algolia search and scheduled jobs.</li><li>Shipped Flutter apps and a React/Material UI admin, with PII masking, Sentry and New Relic monitoring.</li></ul>
+          <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">LangChain</span><span class="chip">OpenAI</span><span class="chip">Node.js</span><span class="chip">MongoDB</span><span class="chip">Flutter</span><span class="chip">React</span></div>
+        </article>
+        <article class="case reveal">
+          <div class="case-head"><span class="n">/02</span><span class="when">Jul 2022 – Present</span></div>
+          <h3>Starn22</h3>
+          <p class="kind">Multi-product commerce platform with AI agents</p>
+          <p class="case-role">Full Stack Developer · Project Lead</p>
+          <ul><li>Lead a Chilean commerce platform covering B2B wholesale, in-store POS and consumer ordering on one shared catalog and inventory.</li><li>Built Clara, a streaming AI assistant with multi-turn memory and tool calling into orders, inventory and delivery.</li><li>Built an AI purchase-order agent driven by POS sales velocity and supplier invoices, with human approval before orders go out.</li><li>Built OCR invoice ingestion with LLM extraction, SII electronic invoicing (XML signatures, SOAP), and Flutter consumer, merchant, POS and staff apps.</li></ul>
+          <div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">MySQL</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">AWS Lambda</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">OpenAI</span><span class="chip">OCR</span></div>
+        </article>
+      </div>
+
+      <p class="sub-label reveal">More client projects</p>
+      <div class="project-grid">
+        <article class="mini reveal"><p class="when">Jan – Jul 2025</p><h3>Lightning Chat Bot</h3><p class="kind">Conversational contact centre</p><p>Voice and chat bots on Amazon Lex and Amazon Connect with Python Lambda fulfilment, PostgreSQL conversation state and PII-safe logging.</p><div class="tags"><span>Lex V2</span><span>Amazon Connect</span><span>Python</span><span>PostgreSQL</span></div></article>
+        <article class="mini reveal"><p class="when">Feb – Sep 2026</p><h3>DataLeon</h3><p class="kind">Human-in-the-loop AI data platform</p><p>React/TypeScript review editor where people correct model output: image classification and a keyboard-accessible bounding-box tool for OCR pipelines.</p><div class="tags"><span>React</span><span>TypeScript</span><span>Accessibility</span></div></article>
+        <article class="mini reveal"><p class="when">Aug 2025 – Jan 2026</p><h3>Swerbench</h3><p class="kind">Coding-agent evaluation data</p><p>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests, used to train and evaluate autonomous coding agents.</p><div class="tags"><span>Python</span><span>Git</span><span>LLM evals</span></div></article>
+        <article class="mini reveal"><p class="when">Oct 2023 – Present</p><h3>P2P lending platform</h3><p class="kind">Marketplace finance</p><p>Full-stack features for high-traffic lending workflows, with Python and Lambda event processing and partner REST APIs.</p><div class="tags"><span>React</span><span>Python</span><span>AWS Lambda</span></div></article>
+        <article class="mini reveal"><p class="when">Aug 2022 – Dec 2023</p><h3>Syntbots</h3><p class="kind">Enterprise automation platform</p><p>Angular interfaces, REST and SOAP services, XML integrations and SQL Server modules, with Python utilities on Lambda.</p><div class="tags"><span>Angular</span><span>SOAP · XML</span><span>SQL Server</span></div></article>
+        <article class="mini reveal"><p class="when">Jan – Sep 2023</p><h3>Publication support</h3><p class="kind">Submissions and appeals</p><p>Submission, appeals and remote-adjudication workflows with React, REST APIs, S3 document storage and Python automation.</p><div class="tags"><span>React</span><span>Python</span><span>S3</span></div></article>
+      </div>
+
+      <p class="sub-label reveal">Open source</p>
+      <div class="oss reveal">
+        <a href="https://github.com/AbhishekGajera/mern-chat-app" target="_blank" rel="noopener"><b>Talk-A-Tive</b><span>Real-time MERN chat with Socket.io</span><i aria-hidden="true">↗</i></a>
+        <a href="https://github.com/AbhishekGajera/diamond-web" target="_blank" rel="noopener"><b>Diamond stock manager</b><span>React stock management system</span><i aria-hidden="true">↗</i></a>
+        <a href="https://github.com/AbhishekGajera/sain-book-flutter" target="_blank" rel="noopener"><b>Sain Book</b><span>Flutter warehouse app</span><i aria-hidden="true">↗</i></a>
+        <a href="https://github.com/AbhishekGajera/react-electron-file-sync" target="_blank" rel="noopener"><b>Electron file sync</b><span>React + Electron desktop sync</span><i aria-hidden="true">↗</i></a>
+      </div>
+      <p class="note reveal">Champion, Codelight 2019 · BCA, Rabindranath Tagore University</p>
     </div>
   </section>
 
@@ -433,8 +518,9 @@ footer {
       <p class="label">05 — Contact</p>
       <h2>Let's <em>build</em></h2>
       <p class="lede">Have a product to build or a team that needs a full-stack developer? I'd like to hear about it.</p>
-      <a class="cta" href="https://github.com/AbhishekGajera" target="_blank" rel="noopener">Say hello on GitHub <span aria-hidden="true">→</span></a>
+      <a class="cta" href="mailto:abhishekgajera3140@gmail.com">abhishekgajera3140@gmail.com <span aria-hidden="true">→</span></a>
       <div class="links">
+        <a href="mailto:abhishekgajera3140@gmail.com">Email</a>
         <a href="https://github.com/AbhishekGajera" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
@@ -445,6 +531,38 @@ footer {
   <span>© <span id="yr">2026</span> Abhishek Gajera</span>
   <span>Built by hand · no frameworks</span>
 </footer>
+
+<div class="chat" id="chat">
+  <div class="chat-panel" id="chat-panel" role="dialog" aria-modal="false" aria-labelledby="chat-title" hidden>
+    <header>
+      <img src="assets/headshot-500.jpg" alt="" width="40" height="40">
+      <div><p id="chat-title">Abhishek Gajera</p><span><i></i>Usually replies within a day</span></div>
+      <button type="button" class="chat-x" id="chat-close" aria-label="Close chat">×</button>
+    </header>
+    <div class="chat-body">
+      <p class="bubble">Hi 👋 Thanks for stopping by.</p>
+      <p class="bubble">What are you working on? Send me a message and it goes straight to my inbox.</p>
+      <div class="quick" role="group" aria-label="Quick topics">
+        <button type="button" data-topic="I have a project I'd like to build">Build a project</button>
+        <button type="button" data-topic="I'd like to talk about a role">Hiring</button>
+        <button type="button" data-topic="I need help with an AI feature">AI help</button>
+      </div>
+    </div>
+    <form class="chat-form" id="chat-form" novalidate>
+      <label class="sr" for="chat-name">Your name</label>
+      <input id="chat-name" name="name" type="text" placeholder="Your name" autocomplete="name">
+      <label class="sr" for="chat-msg">Message</label>
+      <textarea id="chat-msg" name="message" rows="3" placeholder="Tell me about your project…"></textarea>
+      <p class="chat-err" id="chat-err" role="alert"></p>
+      <button type="submit" class="chat-send">Send email <span aria-hidden="true">→</span></button>
+      <p class="chat-alt">or write to <a href="mailto:abhishekgajera3140@gmail.com">abhishekgajera3140@gmail.com</a></p>
+    </form>
+  </div>
+  <button type="button" class="chat-fab" id="chat-open" aria-label="Contact Abhishek" aria-expanded="false" aria-controls="chat-panel">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V16A2.5 2.5 0 0 1 4 13.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 9.5h7M8.5 12.5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <span class="chat-ping" aria-hidden="true"></span>
+  </button>
+</div>
 
 <script>
 (() => {
@@ -538,26 +656,88 @@ footer {
     const r = rig.getBoundingClientRect();
     return Math.atan2(e.clientX - r.left, e.clientY - r.top) * -1;
   };
-  badge.addEventListener("pointerdown", (e) => {
+  // The strap and the badge are both handles. Every way a drag can end is
+  // handled, so the badge can never be left "held" after the button is up:
+  // a release anywhere, a cancelled gesture, lost capture, the window losing
+  // focus, or a move that arrives with no button pressed.
+  let activePointer = null;
+  const start = (e) => {
+    if (e.button !== 0 && e.pointerType === "mouse") return;
+    e.preventDefault(); // no text selection or native drag from the badge
     dragging = true;
-    badge.setPointerCapture(e.pointerId);
-    // Remember where on the badge it was grabbed so it doesn't jump.
+    activePointer = e.pointerId;
+    try { swing.setPointerCapture(e.pointerId); } catch (_) {}
+    // Remember where it was grabbed so it doesn't jump to the pointer.
     grabOffset = angle - pointerAngle(e);
     target = angle;
+    rig.classList.add("grabbing");
     document.querySelector(".hint").style.visibility = "hidden";
-  });
-  badge.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
+  };
+  const move = (e) => {
+    if (!dragging || e.pointerId !== activePointer) return;
+    if (e.pointerType === "mouse" && e.buttons === 0) return release();
     target = pointerAngle(e) + grabOffset;
     if (reduce) { angle = Math.max(-LIMIT, Math.min(LIMIT, target)); render(); }
-  });
-  const release = () => {
+  };
+  function release() {
+    if (!dragging) return;
     dragging = false;
+    activePointer = null;
+    rig.classList.remove("grabbing");
     vel = Math.max(-7, Math.min(7, vel));
     if (reduce) { angle = 0; vel = 0; render(); }
+  }
+  swing.addEventListener("pointerdown", start);
+  swing.addEventListener("dragstart", (e) => e.preventDefault());
+  addEventListener("pointermove", move);
+  addEventListener("pointerup", release);
+  addEventListener("pointercancel", release);
+  swing.addEventListener("lostpointercapture", release);
+  addEventListener("blur", release);
+  document.addEventListener("visibilitychange", release);
+  document.documentElement.addEventListener("mouseleave", release);
+})();
+
+// Chat-style contact: composes an email in the visitor's mail app.
+(() => {
+  const EMAIL = "abhishekgajera3140@gmail.com";
+  const root = document.getElementById("chat");
+  const panel = document.getElementById("chat-panel");
+  const openBtn = document.getElementById("chat-open");
+  const form = document.getElementById("chat-form");
+  const msg = document.getElementById("chat-msg");
+  const err = document.getElementById("chat-err");
+  let topic = "";
+
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    root.classList.toggle("open", open);
+    openBtn.setAttribute("aria-expanded", String(open));
+    if (open) setTimeout(() => msg.focus(), 50); else openBtn.focus();
   };
-  badge.addEventListener("pointerup", release);
-  badge.addEventListener("pointercancel", release);
+  openBtn.addEventListener("click", () => setOpen(panel.hidden));
+  document.getElementById("chat-close").addEventListener("click", () => setOpen(false));
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && !panel.hidden) setOpen(false); });
+
+  panel.querySelectorAll(".quick button").forEach((b) => b.addEventListener("click", () => {
+    panel.querySelectorAll(".quick button").forEach((x) => x.setAttribute("aria-pressed", "false"));
+    b.setAttribute("aria-pressed", "true");
+    topic = b.textContent;
+    if (!msg.value.trim()) msg.value = b.dataset.topic + ". ";
+    msg.focus();
+    err.textContent = "";
+  }));
+  msg.addEventListener("input", () => { err.textContent = ""; });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const text = msg.value.trim();
+    if (text.length < 5) { err.textContent = "Write a short message first."; msg.focus(); return; }
+    const name = document.getElementById("chat-name").value.trim();
+    const subject = `${topic || "Hello"} — from ${name || "your website"}`;
+    const body = `${text}\n\n${name ? "— " + name : ""}`;
+    location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
 })();
 </script>
 </body>

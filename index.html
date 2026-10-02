@@ -533,25 +533,11 @@ h2 em {
 .job h3 { margin: 0; font: 700 22px/1.3 var(--head); letter-spacing: -.02em; }
 .job h3 span { color: var(--muted); font-weight: 500; }
 .job p { margin: 8px 0 0; color: var(--muted); max-width: 70ch; }
-.featured { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
-.case {
-  position: relative; border-radius: 26px; background: #fff; overflow: hidden;
-  border: 1px solid var(--line);
-  box-shadow: 0 40px 80px -50px rgba(40, 24, 90, .5);
-  transition: transform .6s var(--ease), box-shadow .6s var(--ease);
-}
-.case:hover { transform: translateY(-6px); box-shadow: 0 50px 90px -46px rgba(40, 24, 90, .6); }
-.case::after { /* cursor spotlight */
-  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s;
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(139, 123, 240, .12), transparent 60%);
-}
-.case:hover::after { opacity: 1; }
 .cover {
   position: relative; height: 210px; overflow: hidden;
   background: var(--cover);
 }
 .cover-in { position: absolute; inset: 0; transition: transform 1s var(--ease); }
-.case:hover .cover-in { transform: scale(1.04); }
 .cover .big { position: absolute; left: 24px; bottom: 18px; font: 800 clamp(44px, 5vw, 64px)/1 var(--head); letter-spacing: -.05em; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,.25); }
 .cover .pill {
   position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 14px;
@@ -562,47 +548,77 @@ h2 em {
 .cover .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, #6b5ce7); }
 .cover .pill:nth-of-type(2) { animation-delay: -3s; }
 @keyframes float { 50% { transform: translateY(-8px); } }
-.case-body { padding: 24px 26px 28px; }
-.case-head { display: flex; justify-content: space-between; font: 12px/1 var(--mono); color: var(--muted); }
-.case .when { color: var(--accent); }
-.case .kind { margin: 14px 0 0; font: 700 21px/1.25 var(--head); letter-spacing: -.02em; color: var(--text); }
-.case .case-role { margin: 4px 0 0; font: 13px/1.5 var(--mono); color: var(--muted); }
-.case ul { margin: 18px 0 22px; padding: 0; list-style: none; display: grid; gap: 10px; }
-.case li { position: relative; padding-left: 20px; color: var(--muted); font-size: 15px; }
-.case li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--accent); }
 
-.rail-nav { display: flex; gap: 8px; }
-.rail-nav button {
-  width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: grid; place-items: center;
-  border: 1px solid var(--line); background: #fff; color: var(--text); font-size: 18px;
-  transition: transform .3s var(--ease), border-color .3s, opacity .3s;
+/* project index: big rows, filter chips, a preview card that follows the
+   cursor, and rows that open in place */
+.pfilter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 26px; }
+.pfilter button {
+  font: 500 13.5px/1 var(--sans); padding: 10px 15px; border-radius: 999px; cursor: pointer;
+  color: var(--text); background: #fff; border: 1px solid var(--line);
+  transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease);
 }
-.rail-nav button:hover { transform: translateY(-2px); border-color: var(--accent); }
-.rail-nav button:disabled { opacity: .35; cursor: default; transform: none; }
-.rail {
-  display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
-  margin: 0 calc(-1 * clamp(16px, 6vw, 96px)); padding: 6px clamp(16px, 6vw, 96px) 30px;
-  scroll-padding-inline: clamp(16px, 6vw, 96px);
-  scrollbar-width: none; cursor: grab;
+.pfilter button:hover { border-color: var(--accent); transform: translateY(-1px); }
+.pfilter button[aria-pressed="true"] { background: var(--text); color: var(--sheet); border-color: var(--text); }
+.pfilter button span { margin-left: 6px; font: 11px/1 var(--mono); opacity: .55; }
+.plist { border-top: 1px solid var(--line); counter-reset: proj; }
+.proj { border-bottom: 1px solid var(--line); }
+.proj-h { margin: 0; font: inherit; }
+.proj[hidden] { display: none; }
+.proj.enter { animation: projIn .6s var(--ease) both; }
+@keyframes projIn { from { opacity: 0; transform: translateY(14px); } }
+.proj-head {
+  position: relative; width: 100%; display: grid; align-items: center; gap: clamp(12px, 2.4vw, 32px);
+  grid-template-columns: 3.2em minmax(0, 1fr) minmax(0, 16em) 8.5em 40px;
+  padding: clamp(18px, 2.2vw, 26px) 6px; background: none; border: 0; cursor: pointer; text-align: left;
+  color: var(--text); font: inherit; isolation: isolate;
 }
-.rail::-webkit-scrollbar { display: none; }
-.rail.dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
-.rail.dragging * { pointer-events: none; }
-.mini {
-  flex: 0 0 min(340px, 82vw); scroll-snap-align: start;
-  border-radius: 22px; background: #fff; border: 1px solid var(--line); overflow: hidden;
-  box-shadow: 0 30px 60px -44px rgba(40, 24, 90, .5);
-  transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+.proj-head::before { /* tint that sweeps in on hover */
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 14px; background: rgba(107, 92, 231, .07);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s var(--ease);
 }
-.mini:hover { transform: translateY(-6px); box-shadow: 0 40px 70px -40px rgba(40, 24, 90, .55); }
-.mini .cover { height: 150px; }
-.mini .cover .big { font-size: 34px; left: 20px; bottom: 14px; }
-.mini-body { padding: 18px 20px 22px; }
-.mini .when { margin: 0; font: 12px/1 var(--mono); color: var(--accent); }
-.mini .kind { margin: 10px 0 8px; color: var(--text); font: 700 17px/1.3 var(--head); letter-spacing: -.01em; }
-.mini p { margin: 0; color: var(--muted); font-size: 14.5px; }
-.mini .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-.mini .tags span { font: 11px/1 var(--mono); padding: 6px 8px; border-radius: 6px; background: rgba(107, 92, 231, .08); color: var(--accent); }
+.proj-head:hover::before, .proj.open .proj-head::before { transform: none; }
+.proj-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 14px; }
+.proj-n { font: 12px/1 var(--mono); color: var(--muted); }
+.proj-n::before { counter-increment: proj; content: "/" counter(proj, decimal-leading-zero); }
+.proj-name { font: 800 clamp(30px, 4.6vw, 62px)/1 var(--head); letter-spacing: -.045em; transition: transform .6s var(--ease), color .4s; }
+.proj-head:hover .proj-name, .proj.open .proj-name { transform: translateX(10px); color: var(--accent); }
+.proj-sector { font-size: 14.5px; color: var(--muted); line-height: 1.35; }
+.proj-when { font: 12.5px/1.3 var(--mono); color: var(--accent); text-align: right; }
+.proj-x {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; justify-self: end;
+  border: 1px solid var(--line); background: #fff; transition: transform .6s var(--ease), background .3s, color .3s;
+}
+.proj-x::before, .proj-x::after { content: ""; grid-area: 1 / 1; width: 14px; height: 1.6px; border-radius: 2px; background: currentColor; }
+.proj-x::after { transform: rotate(90deg); transition: transform .5s var(--ease); }
+.proj.open .proj-x { background: var(--text); color: var(--sheet); transform: rotate(180deg); }
+.proj.open .proj-x::after { transform: rotate(0deg); }
+.proj-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .7s var(--ease); }
+.proj.open .proj-body { grid-template-rows: 1fr; }
+.proj-body > div { overflow: hidden; }
+.proj-inner {
+  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.4fr); gap: clamp(20px, 3vw, 44px);
+  padding: 6px 6px clamp(26px, 3vw, 38px) calc(3.2em + clamp(12px, 2.4vw, 32px) + 6px);
+  opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease), transform .7s var(--ease);
+}
+.proj.open .proj-inner { opacity: 1; transform: none; transition-delay: .15s; }
+.proj-inner .cover { height: auto; aspect-ratio: 16 / 11; border-radius: 20px; box-shadow: 0 30px 60px -40px rgba(40, 24, 90, .6); }
+.proj-inner .cover .big { font-size: clamp(30px, 3.4vw, 46px); }
+.proj-kind { margin: 0; font: 700 clamp(20px, 2vw, 24px)/1.25 var(--head); letter-spacing: -.02em; }
+.proj-role { margin: 6px 0 0; font: 13px/1.5 var(--mono); color: var(--muted); }
+.proj-inner ul { margin: 16px 0 20px; padding: 0; list-style: none; display: grid; gap: 10px; }
+.proj-inner li { position: relative; padding-left: 20px; color: var(--muted); font-size: 15.5px; }
+.proj-inner li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 2px; background: var(--accent); }
+.peek { /* preview card that trails the cursor over closed rows */
+  position: fixed; left: 0; top: 0; z-index: 30; width: 300px; aspect-ratio: 16 / 11; pointer-events: none;
+  border-radius: 20px; overflow: hidden; opacity: 0; scale: .85; rotate: -4deg;
+  box-shadow: 0 40px 70px -30px rgba(30, 18, 70, .6);
+  transition: opacity .35s var(--ease), scale .5s var(--ease), rotate .6s var(--ease);
+  will-change: transform;
+}
+.peek.on { opacity: 1; scale: 1; rotate: 0deg; }
+.peek .cover { position: absolute; inset: 0; height: auto; }
+.peek .cover .big { font-size: 38px; }
+@media (hover: none) { .peek { display: none; } }
 .oss { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #fff; }
 .oss a { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 18px 20px; text-decoration: none; border: .5px solid var(--line); transition: background .3s; }
 .oss a:hover { background: rgba(107, 92, 231, .06); }
@@ -717,10 +733,12 @@ footer a:hover { color: var(--text); }
   .code-card { width: 60%; font-size: 9.5px; }
   .code-card pre { min-height: 0; padding: 8px 10px 10px; }
   .job { grid-template-columns: 1fr; gap: 6px; }
-  .featured { grid-template-columns: 1fr; }
-  .case-body { padding: 20px; }
+  .proj-head { grid-template-columns: minmax(0, 1fr) 36px; row-gap: 6px; }
+  .proj-n, .proj-when { display: none; }
+  .proj-sector { grid-row: 2; font-size: 13.5px; }
+  .proj-x { grid-row: 1 / 3; grid-column: 2; width: 36px; height: 36px; }
+  .proj-inner { grid-template-columns: 1fr; padding-left: 6px; }
   .hero-foot { flex-direction: column; align-items: start; }
-  .rail-nav { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -942,51 +960,88 @@ footer a:hover { color: var(--text); }
         <div class="job reveal"><div class="when">Feb 2020 – Present</div><div><h3>Independent <span>· Chief Everything Officer for clients</span></h3><p>Own products end to end for founders and businesses: scoping, data model and API design, Python (Django, Flask, FastAPI) and Node.js services, AI features, React/TypeScript UIs, Flutter apps, CI/CD and production support. Lead architecture, code review, estimation and client communication.</p></div></div>
       </div>
 
-      <p class="sub-label reveal">Featured products</p>
-      <div class="featured">
-        <article class="case reveal">
-          <div class="cover" style="--cover: radial-gradient(80% 120% at 0% 0%, #8b7bf0, transparent 60%), radial-gradient(70% 100% at 100% 100%, #4cc3ff, transparent 60%), linear-gradient(135deg, #3b2f9e, #1d4f9a)">
-            <div class="cover-in">
-              <span class="pill" style="top:26px;right:24px;--dot:#6b5ce7"><i></i>Hybrid retrieval</span>
-              <span class="pill" style="top:76px;right:64px;--dot:#16a34a"><i></i>Recruiter search</span>
-              <span class="big">Baysten</span>
-            </div>
-          </div>
-          <div class="case-body">
-            <div class="case-head"><span class="n">/01</span><span class="when">Jul 2022 – Present</span></div>
-            <p class="kind">AI-assisted professional network</p>
-            <p class="case-role">Full Stack Developer · AI Platform Lead</p>
-            <ul><li>Built a FastAPI matching engine with hybrid retrieval over Weaviate, combining semantic embeddings with structured scoring for recruiter searches.</li><li>Added LLM query analysis behind a provider-agnostic layer, with retries, circuit breakers and fallbacks.</li><li>Created resume parsing and LangChain/OpenAI enrichment services with schema-validated outputs, Algolia search and scheduled jobs.</li><li>Shipped Flutter apps and a React/Material UI admin, with PII masking, Sentry and New Relic monitoring.</li></ul>
-            <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">LangChain</span><span class="chip">OpenAI</span><span class="chip">Node.js</span><span class="chip">MongoDB</span><span class="chip">Flutter</span><span class="chip">React</span></div>
-          </div>
+      <div class="pfilter reveal" role="group" aria-label="Filter projects">
+        <button type="button" data-f="all" aria-pressed="true">All<span>8</span></button>
+        <button type="button" data-f="ai" aria-pressed="false">AI<span>5</span></button>
+        <button type="button" data-f="back" aria-pressed="false">Back end<span>6</span></button>
+        <button type="button" data-f="web" aria-pressed="false">Web<span>6</span></button>
+        <button type="button" data-f="mobile" aria-pressed="false">Mobile<span>2</span></button>
+      </div>
+      <div class="plist" id="plist">
+        <article class="proj reveal" data-cats="ai back web mobile">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-baysten">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Baysten</span><span class="proj-sector">Recruiting · AI matching</span><span class="proj-when">2022 — Now</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-baysten"><div><div class="proj-inner">
+            <div class="cover" style="--cover: radial-gradient(80% 120% at 0% 0%, #8b7bf0, transparent 60%), radial-gradient(70% 100% at 100% 100%, #4cc3ff, transparent 60%), linear-gradient(135deg, #3b2f9e, #1d4f9a)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#6b5ce7"><i></i>Hybrid retrieval</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>Recruiter search</span><span class="big">Baysten</span></div></div>
+            <div><p class="proj-kind">AI-assisted professional network</p><p class="proj-role">Full Stack Developer · AI Platform Lead</p><ul><li>Built a FastAPI matching engine with hybrid retrieval over Weaviate, combining semantic embeddings with structured scoring for recruiter searches.</li><li>Added LLM query analysis behind a provider-agnostic layer, with retries, circuit breakers and fallbacks.</li><li>Created resume parsing and LangChain/OpenAI enrichment services with schema-validated outputs, Algolia search and scheduled jobs.</li><li>Shipped Flutter apps and a React/Material UI admin, with PII masking, Sentry and New Relic monitoring.</li></ul><div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">LangChain</span><span class="chip">OpenAI</span><span class="chip">Node.js</span><span class="chip">MongoDB</span><span class="chip">Flutter</span><span class="chip">React</span></div></div>
+          </div></div></div>
         </article>
-        <article class="case reveal">
-          <div class="cover" style="--cover: radial-gradient(80% 120% at 100% 0%, #ffb36b, transparent 60%), radial-gradient(70% 110% at 0% 100%, #ff6fa8, transparent 60%), linear-gradient(135deg, #c2410c, #9d174d)">
-            <div class="cover-in">
-              <span class="pill" style="top:26px;right:24px;--dot:#e07a1f"><i></i>Clara · AI assistant</span>
-              <span class="pill" style="top:76px;right:70px;--dot:#16a34a"><i></i>PO agent</span>
-              <span class="big">Starn22</span>
-            </div>
-          </div>
-          <div class="case-body">
-            <div class="case-head"><span class="n">/02</span><span class="when">Jul 2022 – Present</span></div>
-            <p class="kind">Multi-product commerce platform with AI agents</p>
-            <p class="case-role">Full Stack Developer · Project Lead</p>
-            <ul><li>Lead a Chilean commerce platform covering B2B wholesale, in-store POS and consumer ordering on one shared catalog and inventory.</li><li>Built Clara, a streaming AI assistant with multi-turn memory and tool calling into orders, inventory and delivery.</li><li>Built an AI purchase-order agent driven by POS sales velocity and supplier invoices, with human approval before orders go out.</li><li>Built OCR invoice ingestion with LLM extraction, SII electronic invoicing (XML signatures, SOAP), and Flutter consumer, merchant, POS and staff apps.</li></ul>
-            <div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">MySQL</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">AWS Lambda</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">OpenAI</span><span class="chip">OCR</span></div>
-          </div>
+        <article class="proj reveal" data-cats="ai back web mobile">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-starn22">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Starn22</span><span class="proj-sector">Commerce · AI agents</span><span class="proj-when">2022 — Now</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-starn22"><div><div class="proj-inner">
+            <div class="cover" style="--cover: radial-gradient(80% 120% at 100% 0%, #ffb36b, transparent 60%), radial-gradient(70% 110% at 0% 100%, #ff6fa8, transparent 60%), linear-gradient(135deg, #c2410c, #9d174d)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#e07a1f"><i></i>Clara · AI assistant</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>PO agent</span><span class="big">Starn22</span></div></div>
+            <div><p class="proj-kind">Multi-product commerce platform with AI agents</p><p class="proj-role">Full Stack Developer · Project Lead</p><ul><li>Lead a Chilean commerce platform covering B2B wholesale, in-store POS and consumer ordering on one shared catalog and inventory.</li><li>Built Clara, a streaming AI assistant with multi-turn memory and tool calling into orders, inventory and delivery.</li><li>Built an AI purchase-order agent driven by POS sales velocity and supplier invoices, with human approval before orders go out.</li><li>Built OCR invoice ingestion with LLM extraction, SII electronic invoicing (XML signatures, SOAP), and Flutter consumer, merchant, POS and staff apps.</li></ul><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">MySQL</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">AWS Lambda</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">OpenAI</span><span class="chip">OCR</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="ai web">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-dataleon">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">DataLeon</span><span class="proj-sector">AI data · human in the loop</span><span class="proj-when">2026</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-dataleon"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #0ea5e9, #10b981)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#0ea5e9"><i></i>Review editor</span><span class="pill" style="top:66px;right:54px;--dot:#10b981"><i></i>Bounding boxes</span><span class="big">DataLeon</span></div></div>
+            <div><p class="proj-kind">Human-in-the-loop AI data platform</p><ul><li>Built a React/TypeScript review editor where people correct model output.</li><li>Added image classification review and a keyboard-accessible bounding-box tool for OCR pipelines.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Accessibility</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="ai back">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-lightning">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Lightning</span><span class="proj-sector">Contact centre · voice AI</span><span class="proj-when">2025</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-lightning"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #7c3aed, #2563eb)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#7c3aed"><i></i>Voice + chat bots</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>PII-safe logs</span><span class="big">Lightning</span></div></div>
+            <div><p class="proj-kind">Lightning Chat Bot, a conversational contact centre</p><ul><li>Built voice and chat bots on Amazon Lex V2 and Amazon Connect with Python Lambda fulfilment.</li><li>Kept conversation state in PostgreSQL with PII-safe logging.</li></ul><div class="chips"><span class="chip">Lex V2</span><span class="chip">Amazon Connect</span><span class="chip">Python</span><span class="chip">PostgreSQL</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="ai">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-swe-bench">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Swe-bench</span><span class="proj-sector">AI evals · coding agents</span><span class="proj-when">2025 — 26</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-swe-bench"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #1f2937, #6b5ce7)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#6b5ce7"><i></i>Reproducible failures</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>Objective tests</span><span class="big">Swe-bench</span></div></div>
+            <div><p class="proj-kind">Coding-agent evaluation data</p><ul><li>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests.</li><li>The tasks are used to train and evaluate autonomous coding agents.</li></ul><div class="chips"><span class="chip">Python</span><span class="chip">Git</span><span class="chip">LLM evals</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="web back">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-p2p-lending">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">P2P lending</span><span class="proj-sector">Fintech · marketplace</span><span class="proj-when">2023 — Now</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-p2p-lending"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #f59e0b, #ef4444)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#ef4444"><i></i>High traffic</span><span class="pill" style="top:66px;right:54px;--dot:#f59e0b"><i></i>Partner APIs</span><span class="big">P2P lending</span></div></div>
+            <div><p class="proj-kind">Marketplace finance platform</p><ul><li>Built full-stack features for high-traffic lending workflows.</li><li>Added Python and AWS Lambda event processing and partner REST APIs.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">AWS Lambda</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="web back">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-syntbots">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Syntbots</span><span class="proj-sector">Enterprise automation</span><span class="proj-when">2022 — 23</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-syntbots"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #db2777, #7c3aed)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#db2777"><i></i>SOAP · XML</span><span class="pill" style="top:66px;right:54px;--dot:#7c3aed"><i></i>SQL Server</span><span class="big">Syntbots</span></div></div>
+            <div><p class="proj-kind">Enterprise automation platform</p><ul><li>Built Angular interfaces on REST and SOAP services with XML integrations.</li><li>Delivered SQL Server modules and Python utilities on AWS Lambda.</li></ul><div class="chips"><span class="chip">Angular</span><span class="chip">SOAP · XML</span><span class="chip">SQL Server</span><span class="chip">Python</span></div></div>
+          </div></div></div>
+        </article>
+        <article class="proj reveal" data-cats="web back">
+          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-publication">
+            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Publication</span><span class="proj-sector">Publishing · submissions</span><span class="proj-when">2023</span><span class="proj-x" aria-hidden="true"></span>
+          </button></h3>
+          <div class="proj-body" id="p-publication"><div><div class="proj-inner">
+            <div class="cover" style="--cover: linear-gradient(135deg, #0f766e, #65a30d)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#0f766e"><i></i>Appeals workflow</span><span class="pill" style="top:66px;right:54px;--dot:#65a30d"><i></i>S3 documents</span><span class="big">Publication</span></div></div>
+            <div><p class="proj-kind">Submissions and appeals platform</p><ul><li>Built submission, appeals and remote-adjudication workflows with React and REST APIs.</li><li>Stored documents on S3, with Python automation.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">S3</span></div></div>
+          </div></div></div>
         </article>
       </div>
-
-      <p class="sub-label reveal"><span>More client projects</span><span class="rail-nav"><button type="button" id="rail-prev" aria-label="Previous projects">←</button><button type="button" id="rail-next" aria-label="Next projects">→</button></span></p>
-      <div class="rail" id="rail">
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #7c3aed, #2563eb)"><div class="cover-in"><span class="big">Lightning</span></div></div><div class="mini-body"><p class="when">Jan – Jul 2025</p><p class="kind">Lightning Chat Bot · contact centre</p><p>Voice and chat bots on Amazon Lex and Amazon Connect with Python Lambda fulfilment, PostgreSQL conversation state and PII-safe logging.</p><div class="tags"><span>Lex V2</span><span>Amazon Connect</span><span>Python</span><span>PostgreSQL</span></div></div></article>
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #0ea5e9, #10b981)"><div class="cover-in"><span class="big">DataLeon</span></div></div><div class="mini-body"><p class="when">Feb – Sep 2026</p><p class="kind">Human-in-the-loop AI data platform</p><p>React/TypeScript review editor where people correct model output: image classification and a keyboard-accessible bounding-box tool for OCR pipelines.</p><div class="tags"><span>React</span><span>TypeScript</span><span>Accessibility</span></div></div></article>
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #1f2937, #6b5ce7)"><div class="cover-in"><span class="big">Swe-bench</span></div></div><div class="mini-body"><p class="when">Aug 2025 – Jan 2026</p><p class="kind">Coding-agent evaluation data</p><p>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests, used to train and evaluate autonomous coding agents.</p><div class="tags"><span>Python</span><span>Git</span><span>LLM evals</span></div></div></article>
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #f59e0b, #ef4444)"><div class="cover-in"><span class="big">P2P lending</span></div></div><div class="mini-body"><p class="when">Oct 2023 – Present</p><p class="kind">Marketplace finance</p><p>Full-stack features for high-traffic lending workflows, with Python and Lambda event processing and partner REST APIs.</p><div class="tags"><span>React</span><span>Python</span><span>AWS Lambda</span></div></div></article>
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #db2777, #7c3aed)"><div class="cover-in"><span class="big">Syntbots</span></div></div><div class="mini-body"><p class="when">Aug 2022 – Dec 2023</p><p class="kind">Enterprise automation platform</p><p>Angular interfaces, REST and SOAP services, XML integrations and SQL Server modules, with Python utilities on Lambda.</p><div class="tags"><span>Angular</span><span>SOAP · XML</span><span>SQL Server</span></div></div></article>
-        <article class="mini reveal"><div class="cover" style="--cover: linear-gradient(135deg, #0f766e, #65a30d)"><div class="cover-in"><span class="big">Publication</span></div></div><div class="mini-body"><p class="when">Jan – Sep 2023</p><p class="kind">Submissions and appeals</p><p>Submission, appeals and remote-adjudication workflows with React, REST APIs, S3 document storage and Python automation.</p><div class="tags"><span>React</span><span>Python</span><span>S3</span></div></div></article>
-      </div>
+      <div class="peek" id="peek" aria-hidden="true"></div>
 
       <p class="sub-label reveal">Open source</p>
       <div class="oss reveal">
@@ -1060,7 +1115,7 @@ footer a:hover { color: var(--text); }
 </div>
 
 <script>
-// Page motion: nav, reveals, typing, counters, project rail.
+// Page motion: nav, reveals, typing, counters, project index.
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.getElementById("yr").textContent = new Date().getFullYear();
@@ -1246,47 +1301,55 @@ footer a:hover { color: var(--text); }
     collage.addEventListener("pointerleave", () => { collage.style.setProperty("--px", 0); collage.style.setProperty("--py", 0); });
   }
 
-  // Cursor spotlight on the featured cards.
-  document.querySelectorAll(".case").forEach((c) => c.addEventListener("pointermove", (e) => {
-    const r = c.getBoundingClientRect();
-    c.style.setProperty("--mx", e.clientX - r.left + "px");
-    c.style.setProperty("--my", e.clientY - r.top + "px");
+  // Project index: filter chips, rows that open in place, and a preview
+  // card that trails the cursor over closed rows.
+  const plist = document.getElementById("plist");
+  const rows = [...plist.querySelectorAll(".proj")];
+  const toggle = (row, open) => {
+    row.classList.toggle("open", open);
+    row.querySelector(".proj-head").setAttribute("aria-expanded", String(open));
+  };
+  rows.forEach((row) => row.querySelector(".proj-head").addEventListener("click", () => {
+    const open = !row.classList.contains("open");
+    rows.forEach((r) => r !== row && toggle(r, false));
+    toggle(row, open);
+    peekOff();
+  }));
+  document.querySelectorAll(".pfilter button").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(".pfilter button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    const f = b.dataset.f;
+    rows.forEach((row, i) => {
+      const show = f === "all" || row.dataset.cats.split(" ").includes(f);
+      if (!show) toggle(row, false);
+      row.hidden = !show;
+      row.classList.remove("enter");
+      if (show && !reduce) { void row.offsetWidth; row.style.animationDelay = i * 0.04 + "s"; row.classList.add("enter"); }
+    });
   }));
 
-  // Project rail: arrow buttons and mouse drag.
-  const rail = document.getElementById("rail");
-  const prev = document.getElementById("rail-prev"), next = document.getElementById("rail-next");
-  const stepW = () => (rail.querySelector(".mini")?.offsetWidth || 320) + 18;
-  const syncBtns = () => {
-    prev.disabled = rail.scrollLeft < 8;
-    next.disabled = rail.scrollLeft > rail.scrollWidth - rail.clientWidth - 8;
+  const peek = document.getElementById("peek");
+  let px = 0, py = 0, tx = 0, ty = 0, peekRow = null, peekRaf = 0;
+  const peekLoop = () => {
+    px += (tx - px) * 0.16; py += (ty - py) * 0.16;
+    peek.style.transform = `translate(${(px + 28).toFixed(1)}px, ${(py - peek.offsetHeight / 2).toFixed(1)}px)`;
+    peekRaf = peek.classList.contains("on") || Math.abs(tx - px) > 0.5 ? requestAnimationFrame(peekLoop) : 0;
   };
-  prev.addEventListener("click", () => rail.scrollBy({ left: -stepW() }));
-  next.addEventListener("click", () => rail.scrollBy({ left: stepW() }));
-  rail.addEventListener("scroll", syncBtns, { passive: true });
-  addEventListener("resize", syncBtns);
-  syncBtns();
-  let downX = null, startLeft = 0, moved = 0;
-  rail.addEventListener("pointerdown", (e) => {
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-    downX = e.clientX; startLeft = rail.scrollLeft; moved = 0;
-  });
-  addEventListener("pointermove", (e) => {
-    if (downX === null) return;
-    const dx = e.clientX - downX;
-    moved = Math.max(moved, Math.abs(dx));
-    if (moved > 4) rail.classList.add("dragging");
-    rail.scrollLeft = startLeft - dx;
-  });
-  addEventListener("pointerup", () => {
-    if (downX === null) return;
-    downX = null;
-    if (rail.classList.contains("dragging")) {
-      rail.classList.remove("dragging");
-      // Settle onto the nearest card.
-      rail.scrollTo({ left: Math.round(rail.scrollLeft / stepW()) * stepW() });
-    }
-  });
+  function peekOff() { peek.classList.remove("on"); peekRow = null; }
+  if (!reduce && matchMedia("(hover: hover)").matches) {
+    rows.forEach((row) => {
+      const head = row.querySelector(".proj-head");
+      head.addEventListener("pointerenter", (e) => {
+        if (row.classList.contains("open")) return;
+        if (peekRow !== row) { peek.innerHTML = row.querySelector(".cover").outerHTML; peekRow = row; }
+        if (!peek.classList.contains("on")) { px = tx = e.clientX; py = ty = e.clientY; }
+        peek.classList.add("on");
+        if (!peekRaf) peekRaf = requestAnimationFrame(peekLoop);
+      });
+      head.addEventListener("pointermove", (e) => { tx = e.clientX; ty = e.clientY; });
+      head.addEventListener("pointerleave", peekOff);
+    });
+    addEventListener("scroll", peekOff, { passive: true });
+  }
 })();
 
 (() => {

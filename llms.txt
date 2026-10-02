@@ -1,0 +1,14 @@
+# Abhishek Gajera
+
+> Independent full-stack and AI engineer who owns startup and business products end to end: strategy, Python (Django, Flask, FastAPI) and Node.js back ends, AI features (RAG, agents, LLM tooling), React and Next.js web apps, Flutter mobile apps, and AWS cloud and launch.
+
+- Site: https://abhishekgajera.dev/
+- GitHub: https://github.com/AbhishekGajera
+- Email: abhishekgajera3140@gmail.com
+
+## Selected work
+
+- Baysten: AI-assisted professional network. FastAPI matching engine with hybrid retrieval over Weaviate, LLM query analysis, resume parsing, Flutter apps and a React admin.
+- Starn22: multi-product commerce platform for Chile with Clara (a streaming AI assistant with tool calling), an AI purchase-order agent, OCR invoice ingestion, SII electronic invoicing and Flutter apps.
+- Lightning Chat Bot: voice and chat bots on Amazon Lex and Amazon Connect with Python Lambda fulfilment.
+- DataLeon: human-in-the-loop AI data platform with a React/TypeScript review editor.

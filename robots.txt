@@ -1,0 +1,6 @@
+# Everything on this site is public. Search engines and AI search
+# assistants are welcome to crawl and cite it.
+User-agent: *
+Allow: /
+
+Sitemap: https://abhishekgajera.dev/sitemap.xml

@@ -67,7 +67,7 @@
       "description": "Independent full-stack and AI engineer who owns startup and business products end to end: strategy, Python and Node.js back ends, AI features, web and mobile apps, cloud and launch.",
       "email": "mailto:abhishekgajera3140@gmail.com",
       "alumniOf": { "@type": "CollegeOrUniversity", "name": "Rabindranath Tagore University" },
-      "award": "Champion, Codelight 2019",
+      "award": "Codelight champion",
       "knowsAbout": ["Full-stack development", "Python", "Django", "Django REST Framework", "Flask", "FastAPI", "Node.js", "TypeScript", "JavaScript", "React", "Next.js", "Flutter", "Generative AI", "Retrieval-augmented generation", "LLM agents", "LangChain", "PostgreSQL", "pgvector", "MongoDB", "AWS", "Docker", "CI/CD"],
       "sameAs": ["https://github.com/AbhishekGajera"]
     }
@@ -527,98 +527,84 @@ h2 em {
 .work-head { max-width: 760px; margin: 0 auto clamp(40px, 6vw, 64px); }
 .work-head p { margin: 0; color: var(--muted); font-size: 17px; }
 .sub-label { font: 600 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 72px 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.jobs { display: grid; border-top: 1px solid var(--line); }
-.job { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line); }
-.job .when { font: 13px/1.6 var(--mono); color: var(--accent); }
-.job h3 { margin: 0; font: 700 22px/1.3 var(--head); letter-spacing: -.02em; }
-.job h3 span { color: var(--muted); font-weight: 500; }
-.job p { margin: 8px 0 0; color: var(--muted); max-width: 70ch; }
-.cover {
-  position: relative; height: 210px; overflow: hidden;
-  background: var(--cover);
+/* Work: a deck of product cards that stack as you scroll. Each card carries
+   a small hand-built interface showing what the product does. */
+.deck { position: relative; display: grid; gap: clamp(18px, 3vw, 28px); }
+.scard {
+  --top: calc(86px + var(--i) * 14px);
+  position: sticky; top: var(--top);
+  min-height: min(74vh, 620px);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: clamp(20px, 3.5vw, 52px); align-items: center;
+  padding: clamp(26px, 3.6vw, 52px); border-radius: clamp(24px, 3vw, 36px); overflow: hidden;
+  color: #f4f1ff; background: var(--bg-card);
+  box-shadow: 0 -1px 0 rgba(255,255,255,.18) inset, 0 40px 80px -50px rgba(20, 10, 50, .8);
+  transform-origin: 50% 0; will-change: transform;
 }
-.cover-in { position: absolute; inset: 0; transition: transform 1s var(--ease); }
-.cover .big { position: absolute; left: 24px; bottom: 18px; font: 800 clamp(44px, 5vw, 64px)/1 var(--head); letter-spacing: -.05em; color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,.25); }
-.cover .pill {
-  position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 14px;
-  font: 600 12px/1 var(--sans); color: #1a1430; background: rgba(255, 255, 255, .95);
-  box-shadow: 0 14px 30px -14px rgba(0,0,0,.45);
-  animation: float 6s ease-in-out infinite;
+.scard::before { /* soft glow in the card's colour */
+  content: ""; position: absolute; inset: auto -20% -40% auto; width: 70%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--glow), transparent); opacity: .5; pointer-events: none;
 }
-.cover .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--dot, #6b5ce7); }
-.cover .pill:nth-of-type(2) { animation-delay: -3s; }
-@keyframes float { 50% { transform: translateY(-8px); } }
+.scard::after { /* dims a card as the next one covers it */
+  content: ""; position: absolute; inset: 0; background: #0b0918; opacity: var(--dim, 0); pointer-events: none; border-radius: inherit;
+}
+.scard > * { position: relative; }
+.scard-tag { margin: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.scard-tag span { font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 8px 11px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); }
+.scard h3 { margin: 18px 0 0; font: 800 clamp(46px, 6.4vw, 92px)/.92 var(--head); letter-spacing: -.055em; }
+.scard-kind { margin: 12px 0 0; font: 600 clamp(17px, 1.6vw, 21px)/1.35 var(--head); color: rgba(244,241,255,.88); max-width: 32ch; }
+.scard ul { margin: 22px 0 24px; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 54ch; }
+.scard li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.55; color: rgba(244,241,255,.74); }
+.scard li::before { content: ""; position: absolute; left: 0; top: .62em; width: 10px; height: 2px; border-radius: 2px; background: var(--glow); }
+.scard .chips .chip { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); color: #f4f1ff; font-size: 12.5px; padding: 7px 10px; }
 
-/* project index: big rows, filter chips, a preview card that follows the
-   cursor, and rows that open in place */
-.pfilter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 26px; }
-.pfilter button {
-  font: 500 13.5px/1 var(--sans); padding: 10px 15px; border-radius: 999px; cursor: pointer;
-  color: var(--text); background: #fff; border: 1px solid var(--line);
-  transition: background .3s, color .3s, border-color .3s, transform .3s var(--ease);
+/* the little product interfaces */
+.mock {
+  position: relative; border-radius: 22px; padding: 18px; color: #1a1430;
+  background: #fbfaff; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.4) inset;
+  font: 13px/1.45 var(--sans); transform: rotate(var(--tilt, -1.5deg));
 }
-.pfilter button:hover { border-color: var(--accent); transform: translateY(-1px); }
-.pfilter button[aria-pressed="true"] { background: var(--text); color: var(--sheet); border-color: var(--text); }
-.pfilter button span { margin-left: 6px; font: 11px/1 var(--mono); opacity: .55; }
-.plist { border-top: 1px solid var(--line); counter-reset: proj; }
-.proj { border-bottom: 1px solid var(--line); }
-.proj-h { margin: 0; font: inherit; }
-.proj[hidden] { display: none; }
-.proj.enter { animation: projIn .6s var(--ease) both; }
-@keyframes projIn { from { opacity: 0; transform: translateY(14px); } }
-.proj-head {
-  position: relative; width: 100%; display: grid; align-items: center; gap: clamp(12px, 2.4vw, 32px);
-  grid-template-columns: 3.2em minmax(0, 1fr) minmax(0, 16em) 8.5em 40px;
-  padding: clamp(18px, 2.2vw, 26px) 6px; background: none; border: 0; cursor: pointer; text-align: left;
-  color: var(--text); font: inherit; isolation: isolate;
-}
-.proj-head::before { /* tint that sweeps in on hover */
-  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: 14px; background: rgba(107, 92, 231, .07);
-  transform: scaleX(0); transform-origin: 0 50%; transition: transform .6s var(--ease);
-}
-.proj-head:hover::before, .proj.open .proj-head::before { transform: none; }
-.proj-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 14px; }
-.proj-n { font: 12px/1 var(--mono); color: var(--muted); }
-.proj-n::before { counter-increment: proj; content: "/" counter(proj, decimal-leading-zero); }
-.proj-name { font: 800 clamp(30px, 4.6vw, 62px)/1 var(--head); letter-spacing: -.045em; transition: transform .6s var(--ease), color .4s; }
-.proj-head:hover .proj-name, .proj.open .proj-name { transform: translateX(10px); color: var(--accent); }
-.proj-sector { font-size: 14.5px; color: var(--muted); line-height: 1.35; }
-.proj-when { font: 12.5px/1.3 var(--mono); color: var(--accent); text-align: right; }
-.proj-x {
-  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; justify-self: end;
-  border: 1px solid var(--line); background: #fff; transition: transform .6s var(--ease), background .3s, color .3s;
-}
-.proj-x::before, .proj-x::after { content: ""; grid-area: 1 / 1; width: 14px; height: 1.6px; border-radius: 2px; background: currentColor; }
-.proj-x::after { transform: rotate(90deg); transition: transform .5s var(--ease); }
-.proj.open .proj-x { background: var(--text); color: var(--sheet); transform: rotate(180deg); }
-.proj.open .proj-x::after { transform: rotate(0deg); }
-.proj-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .7s var(--ease); }
-.proj.open .proj-body { grid-template-rows: 1fr; }
-.proj-body > div { overflow: hidden; }
-.proj-inner {
-  display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.4fr); gap: clamp(20px, 3vw, 44px);
-  padding: 6px 6px clamp(26px, 3vw, 38px) calc(3.2em + clamp(12px, 2.4vw, 32px) + 6px);
-  opacity: 0; transform: translateY(10px); transition: opacity .5s var(--ease), transform .7s var(--ease);
-}
-.proj.open .proj-inner { opacity: 1; transform: none; transition-delay: .15s; }
-.proj-inner .cover { height: auto; aspect-ratio: 16 / 11; border-radius: 20px; box-shadow: 0 30px 60px -40px rgba(40, 24, 90, .6); }
-.proj-inner .cover .big { font-size: clamp(30px, 3.4vw, 46px); }
-.proj-kind { margin: 0; font: 700 clamp(20px, 2vw, 24px)/1.25 var(--head); letter-spacing: -.02em; }
-.proj-role { margin: 6px 0 0; font: 13px/1.5 var(--mono); color: var(--muted); }
-.proj-inner ul { margin: 16px 0 20px; padding: 0; list-style: none; display: grid; gap: 10px; }
-.proj-inner li { position: relative; padding-left: 20px; color: var(--muted); font-size: 15.5px; }
-.proj-inner li::before { content: ""; position: absolute; left: 0; top: .72em; width: 8px; height: 2px; background: var(--accent); }
-.peek { /* preview card that trails the cursor over closed rows */
-  position: fixed; left: 0; top: 0; z-index: 30; width: 300px; aspect-ratio: 16 / 11; pointer-events: none;
-  border-radius: 20px; overflow: hidden; opacity: 0; scale: .85; rotate: -4deg;
-  box-shadow: 0 40px 70px -30px rgba(30, 18, 70, .6);
-  transition: opacity .35s var(--ease), scale .5s var(--ease), rotate .6s var(--ease);
-  will-change: transform;
-}
-.peek.on { opacity: 1; scale: 1; rotate: 0deg; }
-.peek .cover { position: absolute; inset: 0; height: auto; }
-.peek .cover .big { font-size: 38px; }
-@media (hover: none) { .peek { display: none; } }
+.mock-bar { display: flex; align-items: center; gap: 6px; margin: -4px 0 14px; font: 11px/1 var(--mono); color: #8a83a3; }
+.mock-bar i { width: 9px; height: 9px; border-radius: 50%; background: #ff5f56; }
+.mock-bar i:nth-child(2) { background: #ffbd2e; } .mock-bar i:nth-child(3) { background: #27c93f; margin-right: 8px; }
+.m-search { display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-radius: 12px; background: #f0edfa; color: #3b3355; }
+.m-search::before { content: "⌕"; font-size: 16px; color: #6b5ce7; }
+.m-rows { display: grid; gap: 8px; margin-top: 12px; }
+.m-row { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 10px; border-radius: 12px; background: #fff; box-shadow: 0 6px 16px -12px rgba(26,20,48,.5); }
+.m-av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font: 700 12px/1 var(--sans); color: #fff; background: var(--a, #6b5ce7); }
+.m-lines b { display: block; height: 8px; border-radius: 4px; background: #e3def2; width: var(--w, 70%); }
+.m-lines b + b { margin-top: 6px; height: 6px; width: calc(var(--w, 70%) - 22%); background: #efebf8; }
+.m-pill { font: 600 11px/1 var(--sans); padding: 6px 9px; border-radius: 999px; color: #fff; background: var(--p, #16a34a); white-space: nowrap; }
+.m-meter { height: 6px; border-radius: 6px; background: #ece8f7; overflow: hidden; margin-top: 6px; }
+.m-meter i { display: block; height: 100%; width: var(--w); border-radius: inherit; background: linear-gradient(90deg, #8b7bf0, #6b5ce7); }
+.m-chat { display: grid; gap: 9px; }
+.m-msg { max-width: 84%; padding: 10px 13px; border-radius: 16px; background: #f0edfa; }
+.m-msg.me { justify-self: end; background: #1a1430; color: #fff; border-bottom-right-radius: 4px; }
+.m-msg.bot { border-bottom-left-radius: 4px; }
+.m-msg small { display: block; font: 600 10.5px/1 var(--mono); color: #8a83a3; margin-bottom: 5px; }
+.m-card { margin-top: 4px; padding: 12px; border-radius: 14px; background: #fff; border: 1px solid #ece8f7; display: grid; gap: 10px; }
+.m-card header { display: flex; justify-content: space-between; gap: 8px; font: 600 12px/1 var(--sans); }
+.m-btns { display: flex; gap: 8px; }
+.m-btns span { flex: 1; text-align: center; padding: 9px; border-radius: 10px; font: 600 12px/1 var(--sans); background: #f0edfa; }
+.m-btns span:first-child { background: #16a34a; color: #fff; }
+.m-doc { position: relative; height: 210px; border-radius: 14px; background: linear-gradient(160deg, #fff, #f2effa); border: 1px solid #ece8f7; overflow: hidden; }
+.m-doc .ln { position: absolute; left: 18px; height: 7px; border-radius: 4px; background: #e3def2; }
+.m-box { position: absolute; border: 2px dashed var(--b, #10b981); border-radius: 6px; background: color-mix(in srgb, var(--b, #10b981) 10%, transparent); }
+.m-box span { position: absolute; top: -11px; left: 6px; font: 600 10px/1 var(--mono); padding: 3px 6px; border-radius: 5px; color: #fff; background: var(--b, #10b981); }
+.m-wave { display: flex; align-items: center; gap: 4px; height: 54px; padding: 0 10px; border-radius: 14px; background: #1a1430; }
+.m-wave i { flex: 1; border-radius: 3px; background: linear-gradient(#a78bfa, #60a5fa); height: var(--h); animation: wave 1.2s ease-in-out infinite; animation-delay: var(--d); }
+@keyframes wave { 50% { transform: scaleY(.35); } }
+.m-term { border-radius: 14px; background: #14102a; color: #d9d4f1; padding: 14px 16px; font: 12px/1.75 var(--mono); white-space: pre-wrap; }
+.m-term .r { color: #ff8f8f; } .m-term .g { color: #6ee7a0; } .m-term .d { color: #6f6890; }
+.m-term .add { color: #6ee7a0; background: rgba(110,231,160,.08); } .m-term .del { color: #ff8f8f; background: rgba(255,143,143,.08); }
+.m-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 6px; }
+.m-node { padding: 12px 8px; border-radius: 12px; background: #fff; text-align: center; font: 600 12px/1.3 var(--sans); box-shadow: 0 8px 18px -12px rgba(26,20,48,.5); border-top: 3px solid var(--n, #db2777); }
+.m-node small { display: block; font: 400 10px/1.3 var(--mono); color: #8a83a3; margin-top: 3px; }
+.m-arrow { color: #b4aed0; font-size: 18px; }
+.m-steps { display: flex; gap: 6px; margin-top: 14px; }
+.m-steps span { flex: 1; padding: 9px 4px; border-radius: 10px; text-align: center; font: 600 11px/1 var(--sans); background: #f0edfa; color: #6a6285; }
+.m-steps span.on { background: var(--s, #0f766e); color: #fff; }
+.m-float { position: absolute; z-index: 2; padding: 9px 12px; border-radius: 12px; font: 600 12px/1 var(--sans); background: #fff; color: #1a1430; box-shadow: 0 16px 30px -14px rgba(0,0,0,.55); animation: float 6s ease-in-out infinite; white-space: nowrap; }
+.m-float i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; background: var(--f, #16a34a); }
 .oss { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #fff; }
 .oss a { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 18px 20px; text-decoration: none; border: .5px solid var(--line); transition: background .3s; }
 .oss a:hover { background: rgba(107, 92, 231, .06); }
@@ -708,6 +694,7 @@ footer a:hover { color: var(--text); }
 .off, .off * { animation-play-state: paused !important; }
 
 @media (max-width: 900px) {
+  .scard { position: relative; top: 0; min-height: 0; grid-template-columns: 1fr; }
   .svc { grid-template-columns: auto 1fr; }
   .svc p { grid-column: 2; text-align: left; margin-top: -8px; }
   .focus > p { transform: translateX(-28px); }
@@ -733,17 +720,13 @@ footer a:hover { color: var(--text); }
   .code-card { width: 60%; font-size: 9.5px; }
   .code-card pre { min-height: 0; padding: 8px 10px 10px; }
   .job { grid-template-columns: 1fr; gap: 6px; }
-  .proj-head { grid-template-columns: minmax(0, 1fr) 36px; row-gap: 6px; }
-  .proj-n, .proj-when { display: none; }
-  .proj-sector { grid-row: 2; font-size: 13.5px; }
-  .proj-x { grid-row: 1 / 3; grid-column: 2; width: 36px; height: 36px; }
-  .proj-inner { grid-template-columns: 1fr; padding-left: 6px; }
+  .mock { --tilt: 0deg; padding: 14px; }
   .hero-foot { flex-direction: column; align-items: start; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .word, .hint, .reveal, .focus > * { animation: none; opacity: 1; transform: none; filter: none; transition: none; }
-  .hero-foot .dot, .badge .photo .tag i, .caret, .cover .pill, .marquee-track, .scene .glow::after, .scene .tok, .codewall pre, .collage .status-chip { animation: none; }
+  .hero-foot .dot, .badge .photo .tag i, .caret, .m-wave i, .m-float, .marquee-track, .scene .glow::after, .scene .tok, .codewall pre, .collage .status-chip { animation: none; }
   .flipper { transition-duration: .01s; }
 }
 </style>
@@ -956,92 +939,161 @@ footer a:hover { color: var(--text); }
         <p class="reveal">Real products for real businesses in recruiting, commerce, finance and customer support. Each one owned from the first conversation to production.</p>
       </div>
 
-      <div class="jobs">
-        <div class="job reveal"><div class="when">Feb 2020 – Present</div><div><h3>Independent <span>· Chief Everything Officer for clients</span></h3><p>Own products end to end for founders and businesses: scoping, data model and API design, Python (Django, Flask, FastAPI) and Node.js services, AI features, React/TypeScript UIs, Flutter apps, CI/CD and production support. Lead architecture, code review, estimation and client communication.</p></div></div>
-      </div>
+      <div class="deck" id="deck">
+        <article class="scard" style="--i:0;--bg-card:radial-gradient(90% 120% at 0% 0%, #4b3bc4, transparent 60%), linear-gradient(140deg, #1f1a5c, #12224d);--glow:#7cc7ff">
+          <div>
+            <p class="scard-tag"><span>AI matching</span><span>Recruiting</span></p>
+            <h3>Baysten</h3>
+            <p class="scard-kind">An AI-assisted professional network where recruiters search for people the way they think.</p>
+            <ul><li>Matching engine in FastAPI with hybrid retrieval over Weaviate: semantic embeddings plus structured scoring.</li><li>LLM query analysis behind a provider-agnostic layer with retries, circuit breakers and fallbacks.</li><li>Resume parsing and LangChain/OpenAI enrichment with schema-validated output, plus Flutter apps and a React admin.</li></ul>
+            <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Weaviate</span><span class="chip">LangChain</span><span class="chip">OpenAI</span><span class="chip">Flutter</span><span class="chip">React</span></div>
+          </div>
+          <div class="mock" style="--tilt:-1.5deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>recruiter search</div>
+            <div class="m-search">Senior Flutter developer who has shipped fintech apps</div>
+            <div class="m-rows">
+              <div class="m-row"><span class="m-av" style="--a:#6b5ce7">AR</span><div class="m-lines" style="--w:72%"><b></b><b></b><div class="m-meter"><i style="--w:92%"></i></div></div><span class="m-pill">Strong match</span></div>
+              <div class="m-row"><span class="m-av" style="--a:#2f7de1">NK</span><div class="m-lines" style="--w:62%"><b></b><b></b><div class="m-meter"><i style="--w:78%"></i></div></div><span class="m-pill" style="--p:#6b5ce7">Good fit</span></div>
+              <div class="m-row"><span class="m-av" style="--a:#e07a1f">JS</span><div class="m-lines" style="--w:66%"><b></b><b></b><div class="m-meter"><i style="--w:61%"></i></div></div><span class="m-pill" style="--p:#8a83a3">Partial</span></div>
+            </div>
+            <span class="m-float" style="right:-14px;top:-16px;--f:#6b5ce7"><i></i>Semantic + structured</span>
+          </div>
+        </article>
 
-      <div class="pfilter reveal" role="group" aria-label="Filter projects">
-        <button type="button" data-f="all" aria-pressed="true">All<span>8</span></button>
-        <button type="button" data-f="ai" aria-pressed="false">AI<span>5</span></button>
-        <button type="button" data-f="back" aria-pressed="false">Back end<span>6</span></button>
-        <button type="button" data-f="web" aria-pressed="false">Web<span>6</span></button>
-        <button type="button" data-f="mobile" aria-pressed="false">Mobile<span>2</span></button>
+        <article class="scard" style="--i:1;--bg-card:radial-gradient(90% 120% at 100% 0%, #c2410c, transparent 60%), linear-gradient(140deg, #4a1630, #2a0f2a);--glow:#ffb36b">
+          <div>
+            <p class="scard-tag"><span>AI agents</span><span>Commerce</span></p>
+            <h3>Starn22</h3>
+            <p class="scard-kind">One commerce platform for wholesale, in-store POS and consumer ordering, with AI agents doing the busywork.</p>
+            <ul><li>Clara, a streaming AI assistant with multi-turn memory and tool calling into orders, inventory and delivery.</li><li>An AI purchase-order agent driven by POS sales velocity and supplier invoices, with human approval before anything is sent.</li><li>OCR invoice ingestion with LLM extraction, SII electronic invoicing, and Flutter apps for consumers, merchants, POS and staff.</li></ul>
+            <div class="chips"><span class="chip">Node.js</span><span class="chip">MySQL</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">AWS Lambda</span><span class="chip">SQS</span><span class="chip">OpenAI</span></div>
+          </div>
+          <div class="mock" style="--tilt:1.5deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>clara</div>
+            <div class="m-chat">
+              <div class="m-msg me">Are we running low on anything for the weekend?</div>
+              <div class="m-msg bot"><small>CLARA</small>Two items are selling faster than usual. I drafted a purchase order for you to review.</div>
+              <div class="m-card"><header><span>Purchase order draft</span><span style="color:#e07a1f">Needs approval</span></header><div class="m-lines" style="--w:84%"><b></b><b></b></div><div class="m-btns"><span>Approve</span><span>Edit</span></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:2;--bg-card:radial-gradient(90% 120% at 0% 100%, #0e7490, transparent 60%), linear-gradient(140deg, #073b3a, #0c2340);--glow:#34d399">
+          <div>
+            <p class="scard-tag"><span>Human in the loop</span><span>AI data</span></p>
+            <h3>DataLeon</h3>
+            <p class="scard-kind">A review editor where people correct what the model got wrong.</p>
+            <ul><li>React and TypeScript editor for correcting model output, from image labels to extracted fields.</li><li>A keyboard-accessible bounding-box tool for OCR pipelines.</li></ul>
+            <div class="chips"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Accessibility</span></div>
+          </div>
+          <div class="mock" style="--tilt:-1deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>review · invoice.png</div>
+            <div class="m-doc">
+              <span class="ln" style="top:22px;width:40%"></span><span class="ln" style="top:40px;width:28%"></span>
+              <span class="ln" style="top:84px;width:70%"></span><span class="ln" style="top:100px;width:62%"></span><span class="ln" style="top:116px;width:66%"></span>
+              <span class="ln" style="top:170px;left:auto;right:18px;width:30%"></span>
+              <span class="m-box" style="left:10px;top:14px;width:46%;height:36px;--b:#10b981"><span>vendor</span></span>
+              <span class="m-box" style="right:10px;top:160px;width:38%;height:28px;--b:#6b5ce7"><span>total</span></span>
+            </div>
+            <span class="m-float" style="left:-16px;bottom:-14px;--f:#10b981"><i></i>Label corrected</span>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:3;--bg-card:radial-gradient(90% 120% at 100% 100%, #2563eb, transparent 60%), linear-gradient(140deg, #2a1663, #121a4a);--glow:#a78bfa">
+          <div>
+            <p class="scard-tag"><span>Voice AI</span><span>Contact centre</span></p>
+            <h3>Lightning</h3>
+            <p class="scard-kind">Voice and chat bots that handle customer conversations in a contact centre.</p>
+            <ul><li>Bots on Amazon Lex V2 and Amazon Connect with Python Lambda fulfilment.</li><li>Conversation state in PostgreSQL with PII-safe logging.</li></ul>
+            <div class="chips"><span class="chip">Lex V2</span><span class="chip">Amazon Connect</span><span class="chip">Python</span><span class="chip">PostgreSQL</span></div>
+          </div>
+          <div class="mock" style="--tilt:1.5deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>live call</div>
+            <div class="m-wave"><i style="--h:40%;--d:-.1s"></i><i style="--h:70%;--d:-.3s"></i><i style="--h:90%;--d:-.5s"></i><i style="--h:55%;--d:-.2s"></i><i style="--h:80%;--d:-.7s"></i><i style="--h:35%;--d:-.4s"></i><i style="--h:65%;--d:-.9s"></i><i style="--h:95%;--d:-.6s"></i><i style="--h:50%;--d:-.15s"></i><i style="--h:75%;--d:-.35s"></i><i style="--h:45%;--d:-.8s"></i><i style="--h:85%;--d:-.25s"></i><i style="--h:60%;--d:-.55s"></i><i style="--h:30%;--d:-.45s"></i><i style="--h:70%;--d:-.65s"></i><i style="--h:50%;--d:-.05s"></i></div>
+            <div class="m-chat" style="margin-top:12px">
+              <div class="m-msg me">I need to change the address on my order.</div>
+              <div class="m-msg bot"><small>BOT</small>Sure, I've found your order. What's the new address?</div>
+            </div>
+            <span class="m-float" style="right:-14px;top:-14px;--f:#16a34a"><i></i>PII masked</span>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:4;--bg-card:radial-gradient(90% 120% at 0% 0%, #4338ca, transparent 60%), linear-gradient(140deg, #111827, #1e1b4b);--glow:#818cf8">
+          <div>
+            <p class="scard-tag"><span>LLM evals</span><span>Coding agents</span></p>
+            <h3>Swe-bench</h3>
+            <p class="scard-kind">Real engineering tasks used to train and test autonomous coding agents.</p>
+            <ul><li>Repository-level tasks, each with a reproducible failure and objective tests.</li><li>Written so an agent's fix can be checked automatically: the tests either pass or they don't.</li></ul>
+            <div class="chips"><span class="chip">Python</span><span class="chip">Git</span><span class="chip">LLM evals</span></div>
+          </div>
+          <div class="mock" style="--tilt:-1.5deg" aria-hidden="true">
+<div class="m-term"><span class="d">$</span> pytest tests/test_parser.py
+<span class="r">FAILED</span> test_parses_nested_quotes
+<span class="d">── agent patch ──</span>
+<span class="del">- return text.split('"')</span>
+<span class="add">+ return shlex.split(text)</span>
+<span class="d">$</span> pytest tests/test_parser.py
+<span class="g">PASSED</span> test_parses_nested_quotes</div>
+            <span class="m-float" style="left:-16px;bottom:-14px;--f:#16a34a"><i></i>Checked automatically</span>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:5;--bg-card:radial-gradient(90% 120% at 100% 0%, #b45309, transparent 60%), linear-gradient(140deg, #3b1a08, #3a0f16);--glow:#fbbf24">
+          <div>
+            <p class="scard-tag"><span>Fintech</span><span>Marketplace</span></p>
+            <h3>P2P lending</h3>
+            <p class="scard-kind">A lending marketplace built to stay quick under heavy traffic.</p>
+            <ul><li>Full-stack features for high-traffic lending workflows.</li><li>Python and AWS Lambda event processing, plus partner REST APIs.</li></ul>
+            <div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">AWS Lambda</span></div>
+          </div>
+          <div class="mock" style="--tilt:1deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>loan requests</div>
+            <div class="m-rows" style="margin-top:0">
+              <div class="m-row"><span class="m-av" style="--a:#f59e0b">₹</span><div class="m-lines" style="--w:70%"><b></b><div class="m-meter"><i style="--w:100%"></i></div></div><span class="m-pill">Funded</span></div>
+              <div class="m-row"><span class="m-av" style="--a:#ef4444">₹</span><div class="m-lines" style="--w:60%"><b></b><div class="m-meter"><i style="--w:64%"></i></div></div><span class="m-pill" style="--p:#e07a1f">Funding</span></div>
+              <div class="m-row"><span class="m-av" style="--a:#8b5cf6">₹</span><div class="m-lines" style="--w:66%"><b></b><div class="m-meter"><i style="--w:22%"></i></div></div><span class="m-pill" style="--p:#6b5ce7">In review</span></div>
+            </div>
+            <span class="m-float" style="right:-14px;bottom:-14px;--f:#f59e0b"><i></i>Event-driven</span>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:6;--bg-card:radial-gradient(90% 120% at 0% 100%, #9d174d, transparent 60%), linear-gradient(140deg, #3b0a2e, #23103f);--glow:#f472b6">
+          <div>
+            <p class="scard-tag"><span>Automation</span><span>Enterprise</span></p>
+            <h3>Syntbots</h3>
+            <p class="scard-kind">An enterprise automation platform that connects older systems to newer ones.</p>
+            <ul><li>Angular interfaces on REST and SOAP services with XML integrations.</li><li>SQL Server modules and Python utilities on AWS Lambda.</li></ul>
+            <div class="chips"><span class="chip">Angular</span><span class="chip">SOAP · XML</span><span class="chip">SQL Server</span><span class="chip">Python</span></div>
+          </div>
+          <div class="mock" style="--tilt:-1deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>workflow</div>
+            <div class="m-flow">
+              <div class="m-node" style="--n:#db2777">SOAP request<small>legacy system</small></div><span class="m-arrow">→</span>
+              <div class="m-node" style="--n:#7c3aed">Transform<small>XML → JSON</small></div><span class="m-arrow">→</span>
+              <div class="m-node" style="--n:#2563eb">SQL Server<small>module</small></div>
+            </div>
+            <div class="m-steps" style="--s:#7c3aed"><span class="on">Received</span><span class="on">Mapped</span><span class="on">Stored</span><span>Notified</span></div>
+          </div>
+        </article>
+
+        <article class="scard" style="--i:7;--bg-card:radial-gradient(90% 120% at 100% 100%, #15803d, transparent 60%), linear-gradient(140deg, #052e2b, #10291a);--glow:#86efac">
+          <div>
+            <p class="scard-tag"><span>Workflows</span><span>Publishing</span></p>
+            <h3>Publication</h3>
+            <p class="scard-kind">Submissions, appeals and remote adjudication in one place.</p>
+            <ul><li>Submission, appeal and remote-adjudication workflows with React and REST APIs.</li><li>Documents on S3, with Python automation.</li></ul>
+            <div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">S3</span></div>
+          </div>
+          <div class="mock" style="--tilt:1.5deg" aria-hidden="true">
+            <div class="mock-bar"><i></i><i></i><i></i>submission</div>
+            <div class="m-doc" style="height:150px">
+              <span class="ln" style="top:22px;width:50%;height:10px;background:#cfc8e2"></span>
+              <span class="ln" style="top:48px;width:76%"></span><span class="ln" style="top:64px;width:70%"></span><span class="ln" style="top:80px;width:72%"></span><span class="ln" style="top:96px;width:48%"></span>
+            </div>
+            <div class="m-steps" style="--s:#15803d"><span class="on">Submitted</span><span class="on">In review</span><span>Appeal</span><span>Decision</span></div>
+          </div>
+        </article>
       </div>
-      <div class="plist" id="plist">
-        <article class="proj reveal" data-cats="ai back web mobile">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-baysten">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Baysten</span><span class="proj-sector">Recruiting · AI matching</span><span class="proj-when">2022 — Now</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-baysten"><div><div class="proj-inner">
-            <div class="cover" style="--cover: radial-gradient(80% 120% at 0% 0%, #8b7bf0, transparent 60%), radial-gradient(70% 100% at 100% 100%, #4cc3ff, transparent 60%), linear-gradient(135deg, #3b2f9e, #1d4f9a)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#6b5ce7"><i></i>Hybrid retrieval</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>Recruiter search</span><span class="big">Baysten</span></div></div>
-            <div><p class="proj-kind">AI-assisted professional network</p><p class="proj-role">Full Stack Developer · AI Platform Lead</p><ul><li>Built a FastAPI matching engine with hybrid retrieval over Weaviate, combining semantic embeddings with structured scoring for recruiter searches.</li><li>Added LLM query analysis behind a provider-agnostic layer, with retries, circuit breakers and fallbacks.</li><li>Created resume parsing and LangChain/OpenAI enrichment services with schema-validated outputs, Algolia search and scheduled jobs.</li><li>Shipped Flutter apps and a React/Material UI admin, with PII masking, Sentry and New Relic monitoring.</li></ul><div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Weaviate</span><span class="chip">Qdrant</span><span class="chip">LangChain</span><span class="chip">OpenAI</span><span class="chip">Node.js</span><span class="chip">MongoDB</span><span class="chip">Flutter</span><span class="chip">React</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="ai back web mobile">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-starn22">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Starn22</span><span class="proj-sector">Commerce · AI agents</span><span class="proj-when">2022 — Now</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-starn22"><div><div class="proj-inner">
-            <div class="cover" style="--cover: radial-gradient(80% 120% at 100% 0%, #ffb36b, transparent 60%), radial-gradient(70% 110% at 0% 100%, #ff6fa8, transparent 60%), linear-gradient(135deg, #c2410c, #9d174d)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#e07a1f"><i></i>Clara · AI assistant</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>PO agent</span><span class="big">Starn22</span></div></div>
-            <div><p class="proj-kind">Multi-product commerce platform with AI agents</p><p class="proj-role">Full Stack Developer · Project Lead</p><ul><li>Lead a Chilean commerce platform covering B2B wholesale, in-store POS and consumer ordering on one shared catalog and inventory.</li><li>Built Clara, a streaming AI assistant with multi-turn memory and tool calling into orders, inventory and delivery.</li><li>Built an AI purchase-order agent driven by POS sales velocity and supplier invoices, with human approval before orders go out.</li><li>Built OCR invoice ingestion with LLM extraction, SII electronic invoicing (XML signatures, SOAP), and Flutter consumer, merchant, POS and staff apps.</li></ul><div class="chips"><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">MySQL</span><span class="chip">React</span><span class="chip">Flutter</span><span class="chip">AWS Lambda</span><span class="chip">EventBridge</span><span class="chip">SQS</span><span class="chip">OpenAI</span><span class="chip">OCR</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="ai web">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-dataleon">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">DataLeon</span><span class="proj-sector">AI data · human in the loop</span><span class="proj-when">2026</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-dataleon"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #0ea5e9, #10b981)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#0ea5e9"><i></i>Review editor</span><span class="pill" style="top:66px;right:54px;--dot:#10b981"><i></i>Bounding boxes</span><span class="big">DataLeon</span></div></div>
-            <div><p class="proj-kind">Human-in-the-loop AI data platform</p><ul><li>Built a React/TypeScript review editor where people correct model output.</li><li>Added image classification review and a keyboard-accessible bounding-box tool for OCR pipelines.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">TypeScript</span><span class="chip">Accessibility</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="ai back">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-lightning">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Lightning</span><span class="proj-sector">Contact centre · voice AI</span><span class="proj-when">2025</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-lightning"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #7c3aed, #2563eb)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#7c3aed"><i></i>Voice + chat bots</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>PII-safe logs</span><span class="big">Lightning</span></div></div>
-            <div><p class="proj-kind">Lightning Chat Bot, a conversational contact centre</p><ul><li>Built voice and chat bots on Amazon Lex V2 and Amazon Connect with Python Lambda fulfilment.</li><li>Kept conversation state in PostgreSQL with PII-safe logging.</li></ul><div class="chips"><span class="chip">Lex V2</span><span class="chip">Amazon Connect</span><span class="chip">Python</span><span class="chip">PostgreSQL</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="ai">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-swe-bench">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Swe-bench</span><span class="proj-sector">AI evals · coding agents</span><span class="proj-when">2025 — 26</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-swe-bench"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #1f2937, #6b5ce7)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#6b5ce7"><i></i>Reproducible failures</span><span class="pill" style="top:66px;right:54px;--dot:#16a34a"><i></i>Objective tests</span><span class="big">Swe-bench</span></div></div>
-            <div><p class="proj-kind">Coding-agent evaluation data</p><ul><li>Wrote repository-level engineering tasks, each with a reproducible failure and objective tests.</li><li>The tasks are used to train and evaluate autonomous coding agents.</li></ul><div class="chips"><span class="chip">Python</span><span class="chip">Git</span><span class="chip">LLM evals</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="web back">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-p2p-lending">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">P2P lending</span><span class="proj-sector">Fintech · marketplace</span><span class="proj-when">2023 — Now</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-p2p-lending"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #f59e0b, #ef4444)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#ef4444"><i></i>High traffic</span><span class="pill" style="top:66px;right:54px;--dot:#f59e0b"><i></i>Partner APIs</span><span class="big">P2P lending</span></div></div>
-            <div><p class="proj-kind">Marketplace finance platform</p><ul><li>Built full-stack features for high-traffic lending workflows.</li><li>Added Python and AWS Lambda event processing and partner REST APIs.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">AWS Lambda</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="web back">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-syntbots">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Syntbots</span><span class="proj-sector">Enterprise automation</span><span class="proj-when">2022 — 23</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-syntbots"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #db2777, #7c3aed)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#db2777"><i></i>SOAP · XML</span><span class="pill" style="top:66px;right:54px;--dot:#7c3aed"><i></i>SQL Server</span><span class="big">Syntbots</span></div></div>
-            <div><p class="proj-kind">Enterprise automation platform</p><ul><li>Built Angular interfaces on REST and SOAP services with XML integrations.</li><li>Delivered SQL Server modules and Python utilities on AWS Lambda.</li></ul><div class="chips"><span class="chip">Angular</span><span class="chip">SOAP · XML</span><span class="chip">SQL Server</span><span class="chip">Python</span></div></div>
-          </div></div></div>
-        </article>
-        <article class="proj reveal" data-cats="web back">
-          <h3 class="proj-h"><button type="button" class="proj-head" aria-expanded="false" aria-controls="p-publication">
-            <span class="proj-n" aria-hidden="true"></span><span class="proj-name">Publication</span><span class="proj-sector">Publishing · submissions</span><span class="proj-when">2023</span><span class="proj-x" aria-hidden="true"></span>
-          </button></h3>
-          <div class="proj-body" id="p-publication"><div><div class="proj-inner">
-            <div class="cover" style="--cover: linear-gradient(135deg, #0f766e, #65a30d)"><div class="cover-in"><span class="pill" style="top:20px;right:20px;--dot:#0f766e"><i></i>Appeals workflow</span><span class="pill" style="top:66px;right:54px;--dot:#65a30d"><i></i>S3 documents</span><span class="big">Publication</span></div></div>
-            <div><p class="proj-kind">Submissions and appeals platform</p><ul><li>Built submission, appeals and remote-adjudication workflows with React and REST APIs.</li><li>Stored documents on S3, with Python automation.</li></ul><div class="chips"><span class="chip">React</span><span class="chip">Python</span><span class="chip">S3</span></div></div>
-          </div></div></div>
-        </article>
-      </div>
-      <div class="peek" id="peek" aria-hidden="true"></div>
 
       <p class="sub-label reveal">Open source</p>
       <div class="oss reveal">
@@ -1050,7 +1102,7 @@ footer a:hover { color: var(--text); }
         <a href="https://github.com/AbhishekGajera/sain-book-flutter" target="_blank" rel="noopener"><b>Sain Book</b><span>Flutter warehouse app</span><i aria-hidden="true">↗</i></a>
         <a href="https://github.com/AbhishekGajera/react-electron-file-sync" target="_blank" rel="noopener"><b>Electron file sync</b><span>React + Electron desktop sync</span><i aria-hidden="true">↗</i></a>
       </div>
-      <p class="note reveal">Champion, Codelight 2019 · BCA, Rabindranath Tagore University</p>
+      <p class="note reveal">Codelight champion · BCA, Rabindranath Tagore University</p>
     </div>
   </section>
 
@@ -1115,7 +1167,7 @@ footer a:hover { color: var(--text); }
 </div>
 
 <script>
-// Page motion: nav, reveals, typing, counters, project index.
+// Page motion: nav, reveals, typing, counters, work deck.
 (() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.getElementById("yr").textContent = new Date().getFullYear();
@@ -1301,55 +1353,28 @@ footer a:hover { color: var(--text); }
     collage.addEventListener("pointerleave", () => { collage.style.setProperty("--px", 0); collage.style.setProperty("--py", 0); });
   }
 
-  // Project index: filter chips, rows that open in place, and a preview
-  // card that trails the cursor over closed rows.
-  const plist = document.getElementById("plist");
-  const rows = [...plist.querySelectorAll(".proj")];
-  const toggle = (row, open) => {
-    row.classList.toggle("open", open);
-    row.querySelector(".proj-head").setAttribute("aria-expanded", String(open));
+  // Work deck: as each card is covered by the next, it shrinks back and dims.
+  const cards = [...document.querySelectorAll(".scard")];
+  const stacked = matchMedia("(min-width: 901px)");
+  let deckTick = false;
+  const deckFrame = () => {
+    deckTick = false;
+    if (!stacked.matches || reduce) return;
+    for (let i = 0; i < cards.length - 1; i++) {
+      const c = cards[i], next = cards[i + 1];
+      const top = parseFloat(getComputedStyle(next).top);
+      const k = Math.min(1, Math.max(0, 1 - (next.getBoundingClientRect().top - top) / c.offsetHeight));
+      c.style.transform = `scale(${(1 - k * 0.06).toFixed(4)})`;
+      c.style.setProperty("--dim", (k * 0.45).toFixed(3));
+    }
   };
-  rows.forEach((row) => row.querySelector(".proj-head").addEventListener("click", () => {
-    const open = !row.classList.contains("open");
-    rows.forEach((r) => r !== row && toggle(r, false));
-    toggle(row, open);
-    peekOff();
-  }));
-  document.querySelectorAll(".pfilter button").forEach((b) => b.addEventListener("click", () => {
-    document.querySelectorAll(".pfilter button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    const f = b.dataset.f;
-    rows.forEach((row, i) => {
-      const show = f === "all" || row.dataset.cats.split(" ").includes(f);
-      if (!show) toggle(row, false);
-      row.hidden = !show;
-      row.classList.remove("enter");
-      if (show && !reduce) { void row.offsetWidth; row.style.animationDelay = i * 0.04 + "s"; row.classList.add("enter"); }
-    });
-  }));
-
-  const peek = document.getElementById("peek");
-  let px = 0, py = 0, tx = 0, ty = 0, peekRow = null, peekRaf = 0;
-  const peekLoop = () => {
-    px += (tx - px) * 0.16; py += (ty - py) * 0.16;
-    peek.style.transform = `translate(${(px + 28).toFixed(1)}px, ${(py - peek.offsetHeight / 2).toFixed(1)}px)`;
-    peekRaf = peek.classList.contains("on") || Math.abs(tx - px) > 0.5 ? requestAnimationFrame(peekLoop) : 0;
-  };
-  function peekOff() { peek.classList.remove("on"); peekRow = null; }
-  if (!reduce && matchMedia("(hover: hover)").matches) {
-    rows.forEach((row) => {
-      const head = row.querySelector(".proj-head");
-      head.addEventListener("pointerenter", (e) => {
-        if (row.classList.contains("open")) return;
-        if (peekRow !== row) { peek.innerHTML = row.querySelector(".cover").outerHTML; peekRow = row; }
-        if (!peek.classList.contains("on")) { px = tx = e.clientX; py = ty = e.clientY; }
-        peek.classList.add("on");
-        if (!peekRaf) peekRaf = requestAnimationFrame(peekLoop);
-      });
-      head.addEventListener("pointermove", (e) => { tx = e.clientX; ty = e.clientY; });
-      head.addEventListener("pointerleave", peekOff);
-    });
-    addEventListener("scroll", peekOff, { passive: true });
-  }
+  addEventListener("scroll", () => { if (!deckTick) { deckTick = true; requestAnimationFrame(deckFrame); } }, { passive: true });
+  addEventListener("resize", deckFrame);
+  stacked.addEventListener("change", () => {
+    cards.forEach((c) => { c.style.transform = ""; c.style.removeProperty("--dim"); });
+    deckFrame();
+  });
+  deckFrame();
 })();
 
 (() => {

@@ -1256,18 +1256,24 @@ footer a:hover { color: var(--text); }
   let down = null, travel = 0; // for telling a tap from a drag
   const W_CLIP = 0.4, W_CARD = 0.4; // card particles are heavier than rope points
 
-  const layout = (swingAngle = 0) => {
+  const fit = () => {
     const w = hero.clientWidth, h = hero.clientHeight;
     const badgeH = badge.offsetHeight;
     anchor = { x: w / 2, y: -40 };
     // Rest with the card's centre a little above the middle of the hero.
     reach = Math.max(180, h * 0.47 - badgeH / 2 + 40);
-    seg = restSeg = reach / N;
+    restSeg = reach / N;
     D = 30 + badgeH / 2;
+  };
+  // drop < 1 starts the strap bunched up near the top, so the card falls
+  // in, the strap catches it and it swings, as if it was just let go.
+  const layout = (swingAngle = 0, drop = 1) => {
+    fit();
+    seg = restSeg;
     pts = []; prev = [];
     const sx = -Math.sin(swingAngle), sy = Math.cos(swingAngle);
     for (let i = 0; i <= N; i++) {
-      const q = { x: anchor.x + sx * seg * i, y: anchor.y + sy * seg * i };
+      const q = { x: anchor.x + sx * seg * i, y: anchor.y + sy * seg * i * drop };
       pts.push(q); prev.push({ ...q });
     }
     const C = pts[N];
@@ -1367,9 +1373,16 @@ footer a:hover { color: var(--text); }
     requestAnimationFrame(frame);
   };
 
-  layout(reduce ? 0 : 0.34);
+  layout(reduce ? 0 : 0.5, reduce ? 1 : 0.35);
   if (reduce) render(); else requestAnimationFrame(frame);
-  addEventListener("resize", () => { layout(0); if (reduce) render(); });
+  // A resize (fonts loading, a scrollbar or browser bar appearing) refits the
+  // strap but keeps the card's motion, so the opening drop is never cut short.
+  addEventListener("resize", () => {
+    if (reduce) { layout(0); render(); return; }
+    const dx = hero.clientWidth / 2 - anchor.x;
+    fit();
+    for (const p of [...pts, ...prev, B, Bprev]) p.x += dx;
+  });
 
   // Flip between the ID side and the "what I do" side. Only the card face
   // turns; the rope and swing are left exactly as they are.

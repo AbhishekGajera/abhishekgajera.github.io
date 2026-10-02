@@ -284,16 +284,99 @@ h2 em {
 
 /* about */
 .about-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: clamp(36px, 6vw, 88px); align-items: center; }
-.collage { position: relative; padding: 0 8% 18% 0; }
-.collage .photo-card {
-  position: relative; border-radius: 28px; overflow: hidden; aspect-ratio: 1;
-  box-shadow: 0 40px 70px -40px rgba(40, 24, 90, .55);
-  transform: rotate(-2.5deg);
+.collage { position: relative; padding: 8% 8% 18% 0; --px: 0; --py: 0; }
+/* Cut-out portrait standing in front of a dark editor full of the code I
+   write; the head breaks out of the top of the frame and the layers drift
+   apart with the cursor. */
+.collage .photo-card { position: relative; aspect-ratio: 1; transform: rotate(-2.5deg); }
+.scene {
+  position: absolute; inset: 16% 0 0 0; border-radius: 28px; overflow: hidden;
+  background:
+    radial-gradient(70% 60% at 85% 100%, rgba(76, 195, 255, .18), transparent 70%),
+    linear-gradient(160deg, #1d1745 0%, #110e26 55%, #161a3d 100%);
+  box-shadow: 0 40px 70px -40px rgba(40, 24, 90, .7), inset 0 0 0 1px rgba(198, 184, 255, .16);
 }
-.collage .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.08); transition: transform 1.6s var(--ease); }
-.collage.in .photo-card img { transform: none; }
+.scene::before { /* faint grid fading out from the centre */
+  content: ""; position: absolute; inset: -10%; z-index: 1; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(198, 184, 255, .07) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(90deg, rgba(198, 184, 255, .07) 0 1px, transparent 1px 30px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent);
+  mask-image: radial-gradient(closest-side, #000 40%, transparent);
+  transform: translate(calc(var(--px) * -10px), calc(var(--py) * -10px));
+  transition: transform .8s var(--ease);
+}
+.scene-bar {
+  position: absolute; inset: 0 0 auto 0; z-index: 3; height: 34px;
+  display: flex; align-items: center; gap: 6px; padding: 0 14px;
+  background: rgba(10, 8, 24, .55); border-bottom: 1px solid rgba(198, 184, 255, .1);
+  font: 10.5px/1 var(--mono); color: #8f88b3;
+}
+.scene-bar i { width: 8px; height: 8px; border-radius: 50%; background: #ff5f56; }
+.scene-bar i:nth-child(2) { background: #ffbd2e; }
+.scene-bar i:nth-child(3) { background: #27c93f; margin-right: 8px; }
+.scene-bar b { font-weight: 400; color: #d9d4f1; padding: 5px 9px; border-radius: 6px; background: rgba(198, 184, 255, .1); }
+.codewall { /* the editor scrolling slowly behind me */
+  position: absolute; inset: 34px 0 0 0; overflow: hidden;
+  -webkit-mask-image: radial-gradient(60% 55% at 50% 38%, rgba(0,0,0,.25), #000 75%);
+  mask-image: radial-gradient(60% 55% at 50% 38%, rgba(0,0,0,.25), #000 75%);
+  transform: translate(calc(var(--px) * -6px), calc(var(--py) * -6px));
+  transition: transform .8s var(--ease);
+}
+.codewall pre {
+  margin: 0; padding: 10px 14px; white-space: pre; opacity: .62;
+  font: clamp(8.5px, .78vw, 10.5px)/1.75 var(--mono); color: #b9b3d6;
+  animation: codeScroll 46s linear infinite;
+}
+.codewall .ln { display: inline-block; width: 2.2em; color: #4f4876; user-select: none; }
+.codewall .k { color: #c6b8ff; } .codewall .s { color: #9be29b; } .codewall .f { color: #7cc7ff; }
+.codewall .c { color: #6f6890; font-style: italic; } .codewall .n { color: #ffb86b; } .codewall .ok { color: #39d353; }
+@keyframes codeScroll { to { transform: translateY(-50%); } }
+.scene .glow { /* violet light behind the head, with an orbit ring */
+  position: absolute; left: 50%; top: 24%; z-index: 2; width: 80%; aspect-ratio: 1; translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(198, 184, 255, .55), rgba(139, 123, 240, .28) 55%, transparent);
+  transform: translate(calc(var(--px) * -16px), calc(var(--py) * -16px));
+  transition: transform .8s var(--ease);
+}
+.scene .glow::after {
+  content: ""; position: absolute; inset: -12%; border-radius: 50%;
+  border: 1.5px dashed rgba(198, 184, 255, .4);
+  animation: spin 40s linear infinite;
+}
+@keyframes spin { to { transform: rotate(1turn); } }
+.scene .tok { /* floating code tokens */
+  position: absolute; z-index: 3; padding: 7px 10px; border-radius: 10px;
+  font: 600 13px/1 var(--mono); color: #e9e4ff;
+  background: rgba(139, 123, 240, .22); border: 1px solid rgba(198, 184, 255, .3);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .6);
+  animation: float 6s ease-in-out infinite;
+}
+.scene .tok:nth-of-type(2) { animation-delay: -2s; color: #9be29b; }
+.scene .tok:nth-of-type(3) { animation-delay: -4s; color: #7cc7ff; }
+.collage .me {
+  position: absolute; left: 5%; bottom: 0; width: 90%; height: auto; display: block;
+  /* Head rises out of the frame; the shoulders melt into the scene. */
+  -webkit-mask-image: linear-gradient(#000 52%, transparent 97%), linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(#000 52%, transparent 97%), linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent);
+  filter: drop-shadow(0 18px 30px rgba(10, 6, 30, .55));
+  transform: translate(calc(var(--px) * 8px), calc(var(--py) * 6px)) scale(1.04);
+  transform-origin: 50% 100%;
+  transition: transform 1.4s var(--ease);
+}
+.collage.in .me { transform: translate(calc(var(--px) * 8px), calc(var(--py) * 6px)); }
+.collage .status-chip {
+  position: absolute; left: -5%; bottom: 30%; z-index: 3;
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 14px;
+  font: 600 12.5px/1 var(--sans); color: #1a1430; background: rgba(255, 255, 255, .9);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 18px 34px -16px rgba(40, 24, 90, .55);
+  transform: rotate(-4deg); animation: float 6s ease-in-out infinite;
+}
+.collage .status-chip i { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 3px rgba(22, 163, 74, .2); }
 .collage .script {
-  position: absolute; top: 6%; right: -2%; z-index: 2;
+  position: absolute; top: 15%; right: -9%; z-index: 2;
   font: 600 clamp(30px, 3.4vw, 44px)/1 "Caveat", cursive; color: #d8508f; transform: rotate(-8deg);
 }
 .code-card {
@@ -582,7 +665,7 @@ footer a:hover { color: var(--text); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .word, .hint, .reveal, .focus > * { animation: none; opacity: 1; transform: none; filter: none; transition: none; }
-  .hero-foot .dot, .badge .photo .tag i, .caret, .cover .pill, .marquee-track { animation: none; }
+  .hero-foot .dot, .badge .photo .tag i, .caret, .cover .pill, .marquee-track, .scene .glow::after, .scene .tok, .codewall pre, .collage .status-chip { animation: none; }
   .flipper { transition-duration: .01s; }
 }
 </style>
@@ -676,7 +759,18 @@ footer a:hover { color: var(--text); }
     <div class="wrap about-grid">
       <div class="collage reveal" id="collage">
         <span class="script" aria-hidden="true">hi, I'm Abhishek</span>
-        <div class="photo-card"><img src="assets/profile-square.jpg" alt="Abhishek Gajera" width="1080" height="1080" loading="lazy"></div>
+        <div class="photo-card">
+          <div class="scene" aria-hidden="true">
+            <div class="scene-bar"><i></i><i></i><i></i><b>abhishek.tsx</b></div>
+            <div class="codewall"><pre id="codewall"></pre></div>
+            <span class="glow"></span>
+            <i class="tok" style="left:7%;top:30%">&lt;/&gt;</i>
+            <i class="tok" style="right:7%;top:24%">{ }</i>
+            <i class="tok" style="right:12%;top:56%">=&gt;</i>
+          </div>
+          <img class="me" src="assets/me-cutout.webp" alt="Abhishek Gajera" width="900" height="1125" loading="lazy">
+        </div>
+        <span class="status-chip" aria-hidden="true"><i></i>Open to new projects</span>
         <div class="code-card" aria-hidden="true">
           <header><i></i><i></i><i></i></header>
           <pre id="code"></pre>
@@ -994,13 +1088,12 @@ footer a:hover { color: var(--text); }
   const h2Text = document.getElementById("type-h2-text");
   const code = document.getElementById("code");
   const snippet = [
-    ['<span class="c">// abhishek.ts</span>', ""],
-    ['<span class="k">const</span> me = {', ""],
-    ['  role: <span class="s">"full-stack + AI"</span>,', ""],
-    ['  ships: [<span class="s">"web"</span>, <span class="s">"ai"</span>, <span class="s">"mobile"</span>],', ""],
-    ['  available: <span class="k">true</span>,', ""],
-    ["};", ""],
-  ].map((l) => l[0]);
+    '<span class="c">~/abhishek</span> <span class="k">$</span> npm run ship',
+    '<span class="s">✓</span> tests passed',
+    '<span class="s">✓</span> web, ai and mobile builds ready',
+    '<span class="s">✓</span> deployed to production',
+    '<span class="c">~/abhishek</span> <span class="k">$</span> <span class="k">▍</span>',
+  ];
   const runAbout = async () => {
     const text = "I build things people actually use.";
     if (reduce) { h2Text.textContent = text; code.innerHTML = snippet.join("\n"); return; }
@@ -1026,6 +1119,57 @@ footer a:hover { color: var(--text); }
   }, { threshold: 0.12 });
   document.querySelectorAll(".reveal, .focus").forEach((el) => io.observe(el));
   if (reduce) document.querySelectorAll(".reveal, .focus").forEach((el) => el.classList.add("in"));
+
+  // About portrait backdrop: an editor scrolling through code from my stack.
+  // Each line is [tokens], where a token is "text" or [class, "text"].
+  const wall = [
+    [["c", "# match.py — hybrid retrieval over Weaviate"]],
+    [["f", "@app.post"], "(", ["s", '"/match"'], ")"],
+    [["k", "async def "], ["f", "match"], "(q: Query):"],
+    ["    hits = ", ["k", "await "], "weaviate.hybrid(q.text, alpha=", ["n", "0.6"], ")"],
+    ["    ", ["k", "return "], ["f", "rerank"], "(hits, q.filters)"],
+    [""],
+    [["c", "// app/api/chat/route.ts"]],
+    [["k", "export async function "], ["f", "POST"], "(req: Request) {"],
+    ["  ", ["k", "const "], "{ messages } = ", ["k", "await "], "req.", ["f", "json"], "();"],
+    ["  ", ["k", "const "], "stream = claude.messages.", ["f", "stream"], "({"],
+    ["    model, messages, tools,"],
+    ["  });"],
+    ["  ", ["k", "return new "], ["f", "Response"], "(stream.", ["f", "toReadableStream"], "());"],
+    ["}"],
+    [""],
+    [["c", "// order_card.dart"]],
+    [["k", "class "], ["f", "OrderCard "], ["k", "extends "], "StatelessWidget {"],
+    ["  ", ["f", "@override"]],
+    ["  Widget ", ["f", "build"], "(BuildContext context) =>"],
+    ["      ", ["f", "Card"], "(child: ", ["f", "Text"], "(order.total.", ["f", "format"], "()));"],
+    ["}"],
+    [""],
+    [["c", "-- schema.sql"]],
+    [["k", "CREATE INDEX "], "ON docs ", ["k", "USING "], "hnsw (embedding vector_cosine_ops);"],
+    [""],
+    [["n", "$ "], "git commit -m ", ["s", '"ship it"']],
+    [["n", "$ "], "flutter build ipa --release"],
+    [["ok", "✓ "], "Deployed to production"],
+    [""],
+  ];
+  const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const wallHtml = wall.map((line, i) =>
+    `<span class="ln">${i + 1}</span>` + line.map((t) => (typeof t === "string" ? esc(t) : `<span class="${t[0]}">${esc(t[1])}</span>`)).join("")
+  ).join("\n");
+  // Two copies so the scroll can loop without a seam.
+  document.getElementById("codewall").innerHTML = wallHtml + "\n" + wallHtml;
+
+  // About portrait: the scene and the cut-out drift apart with the cursor.
+  const collage = document.getElementById("collage");
+  if (!reduce && matchMedia("(hover: hover)").matches) {
+    collage.addEventListener("pointermove", (e) => {
+      const r = collage.getBoundingClientRect();
+      collage.style.setProperty("--px", ((e.clientX - r.left) / r.width * 2 - 1).toFixed(3));
+      collage.style.setProperty("--py", ((e.clientY - r.top) / r.height * 2 - 1).toFixed(3));
+    });
+    collage.addEventListener("pointerleave", () => { collage.style.setProperty("--px", 0); collage.style.setProperty("--py", 0); });
+  }
 
   // Cursor spotlight on the featured cards.
   document.querySelectorAll(".case").forEach((c) => c.addEventListener("pointermove", (e) => {
@@ -1229,11 +1373,21 @@ footer a:hover { color: var(--text); }
 
   // Flip between the ID side and the "what I do" side. Only the card face
   // turns; the rope and swing are left exactly as they are.
+  // It also turns over on its own: the photo side stays up a little longer
+  // than the back. While someone holds the card, the timer waits.
+  const dwell = () => (badge.classList.contains("flipped") ? 4000 : 6000);
+  let nextFlip = performance.now() + 4500;
   const flip = () => {
     const on = badge.classList.toggle("flipped");
     faces[0].setAttribute("aria-hidden", String(on));
     faces[1].setAttribute("aria-hidden", String(!on));
+    nextFlip = performance.now() + dwell();
   };
+  if (!reduce) setInterval(() => {
+    const now = performance.now();
+    if (down || dragging || document.hidden) { nextFlip = Math.max(nextFlip, now + 1500); return; }
+    if (now >= nextFlip) flip();
+  }, 200);
   card.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); }
   });

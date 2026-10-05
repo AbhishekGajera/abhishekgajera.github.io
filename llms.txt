@@ -1,10 +1,15 @@
 # Abhishek Gajera
 
-> Independent full-stack and AI engineer who owns startup and business products end to end: strategy, Python (Django, Flask, FastAPI) and Node.js back ends, AI features (RAG, agents, LLM tooling), React and Next.js web apps, Flutter mobile apps, and AWS cloud and launch.
+> Independent AI agent and automation developer and full-stack engineer who owns startup and business products end to end: strategy, Python (Django, Flask, FastAPI) and Node.js back ends, AI features (RAG, agents, LLM tooling), React and Next.js web apps, Flutter mobile apps, and AWS cloud and launch.
 
 - Site: https://abhishekgajera.dev/
 - GitHub: https://github.com/AbhishekGajera
 - Email: abhishekgajera3140@gmail.com
+
+## Services
+
+- [AI agent development](https://abhishekgajera.dev/ai-agent-developer/): custom AI agents with tool calling, memory, RAG, guardrails and human approval.
+- [AI automation](https://abhishekgajera.dev/ai-automation/): automating invoices, documents, data entry, customer conversations and operations with LLMs and event-driven back ends.
 
 ## Selected work
 
